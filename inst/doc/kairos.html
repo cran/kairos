@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="N. Frerebeau" />
+
+<meta name="date" content="2021-11-06" />
+
+<title>Manual</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Manual</h1>
+<h4 class="author">N. Frerebeau</h4>
+<h4 class="date">2021-11-06</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#not-all-dates-are-created-equal"><span class="toc-section-number">0.1</span> Not All Dates Are Created Equal</a></li>
+<li><a href="#mean-ceramic-date"><span class="toc-section-number">0.2</span> Mean Ceramic Date</a>
+<ul>
+<li><a href="#definition"><span class="toc-section-number">0.2.1</span> Definition</a></li>
+<li><a href="#limitation"><span class="toc-section-number">0.2.2</span> Limitation</a></li>
+<li><a href="#usage"><span class="toc-section-number">0.2.3</span> Usage</a></li>
+</ul></li>
+<li><a href="#event-accumulation-date"><span class="toc-section-number">0.3</span> Event &amp; Accumulation Date</a>
+<ul>
+<li><a href="#definition-1"><span class="toc-section-number">0.3.1</span> Definition</a></li>
+<li><a href="#limitation-1"><span class="toc-section-number">0.3.2</span> Limitation</a></li>
+<li><a href="#usage-1"><span class="toc-section-number">0.3.3</span> Usage</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kairos)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(folio) <span class="co"># Datasets</span></span></code></pre></div>
+<div id="not-all-dates-are-created-equal" class="section level2" number="0.1">
+<h2><span class="header-section-number">0.1</span> Not All Dates Are Created Equal</h2>
+<p>This vignette presents different methods for dating archaeological assemblages using artifact count data. Here, dating refers to “the placement in time of events relative to one another or to any established scale of temporal measurement” <span class="citation">(Dean 1978)</span>. This involves distinguishing between <em>relative</em> (that provide only a chronological sequence of events) and <em>absolute</em> dating methods (that yield a calendric indication and may provide the duration of an event) <span class="citation">(O’Brien and Lyman 2002)</span>. Strictly speaking, there is no absolute dating given how dates are produced and given that any date refers to a scale. The distinction between absolute and relative time can be rephrased more clearly as quantifiable <em>vs</em> non-quantifiable <span class="citation">(O’Brien and Lyman 2002)</span>: absolute dates “are expressed as points on standard scales of time measurement” <span class="citation">(Dean 1978)</span>.</p>
+<p>We will keep here the distinction between a date an age as formulated by <span class="citation">Colman, Pierce, and Birkeland (1987)</span>: “a <em>date</em> is a specific point in time, whereas an <em>age</em> is an interval of time measured back from the present.” Dealing with dates in archaeology can be tricky if one does not take into account the sources of the chronological information. In most cases, a date represents a <em>terminus</em> for a given archaeological assemblage. That is, a date before (<em>terminus ante-quem</em>) or after (<em>terminus post-quem</em>) which the formation process of the assemblage took place. This in mind, one obvious question that should underlie any investigation is what does the date represent?</p>
+<p>First, let’s be more formal:</p>
+<ul>
+<li>An archaeological <em>event</em> is determined by its unknown calendar date <span class="math inline">\(t\)</span> with associated error <span class="math inline">\(\delta t\)</span>.</li>
+<li><span class="math inline">\(t \pm \delta t\)</span> can be provided by different means and is assumed to be related to the event.</li>
+</ul>
+<p>This implies that:</p>
+<ul>
+<li>There are no error-free dates in archaeology (although uncertainties cannot always be quantified).</li>
+<li>Errors are assumed here to be symmetrical. This is true for most physical dating methods, but may be false after some data processing (e.g. 14C calibration).</li>
+</ul>
+<p>For a set of <span class="math inline">\(m\)</span> assemblages in which <span class="math inline">\(p\)</span> different types of artifact were recorded, let <span class="math inline">\(X = \left[ x_{ij} \right] ~\forall i \in \left[ 1,m \right], j \in \left[ 1,p \right]\)</span> be the <span class="math inline">\(m \times p\)</span> count matrix with row and column sums:</p>
+<p><span class="math display">\[
+\begin{align}
+ x_{i \cdot} = \sum_{j = 1}^{p} x_{ij} &amp;&amp;
+ x_{\cdot j} = \sum_{i = 1}^{m} x_{ij} &amp;&amp;
+ x_{\cdot \cdot} = \sum_{i = 1}^{m} x_{i \cdot} = \sum_{j = 1}^{p} x_{\cdot j} &amp;&amp;
+ \forall x_{ij} \in \mathbb{N}
+\end{align}
+\]</span></p>
+<p>Note that all <span class="math inline">\(x_{ij}\)</span> are assumed to be error-free.</p>
+</div>
+<div id="mean-ceramic-date" class="section level2" number="0.2">
+<h2><span class="header-section-number">0.2</span> Mean Ceramic Date</h2>
+<div id="definition" class="section level3" number="0.2.1">
+<h3><span class="header-section-number">0.2.1</span> Definition</h3>
+<p>The Mean Ceramic Date (MCD) is a point estimate of the occupation of an archaeological site <span class="citation">(South 1977)</span>. The MCD is estimated as the weighted mean of the date midpoints of the ceramic types <span class="math inline">\(t_j\)</span> (based on absolute dates or the known production interval) found in a given assemblage. The weights are the conditional frequencies of the respective types in the assemblage.</p>
+<p>The MCD is defined as: <span class="math display">\[ 
+t^{MCD}_i = \sum_{j = 1}^{p} t_j \times \frac{x_{ij}}{x_{i \cdot}}
+\]</span></p>
+</div>
+<div id="limitation" class="section level3" number="0.2.2">
+<h3><span class="header-section-number">0.2.2</span> Limitation</h3>
+<p>The MCD is a point estimate: knowing the mid-date of an assemblage and not knowing the time span of accumulation might be short sighted. <strong>MCD offers a rough indication of the chronological position of an assemblage, but does not tell if an assemblage represents ten or 100 years.</strong></p>
+</div>
+<div id="usage" class="section level3" number="0.2.3">
+<h3><span class="header-section-number">0.2.3</span> Usage</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Coerce the zuni dataset to an abundance (count) matrix</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;zuni&quot;</span>, <span class="at">package =</span> <span class="st">&quot;folio&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>zuni_counts <span class="ot">&lt;-</span> <span class="fu">as_count</span>(zuni)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Set the start and end dates for each ceramic type</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>zuni_dates <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">LINO =</span> <span class="fu">c</span>(<span class="dv">600</span>, <span class="dv">875</span>), <span class="at">KIAT =</span> <span class="fu">c</span>(<span class="dv">850</span>, <span class="dv">950</span>), <span class="at">RED =</span> <span class="fu">c</span>(<span class="dv">900</span>, <span class="dv">1050</span>), </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">GALL =</span> <span class="fu">c</span>(<span class="dv">1025</span>, <span class="dv">1125</span>), <span class="at">ESC =</span> <span class="fu">c</span>(<span class="dv">1050</span>, <span class="dv">1150</span>), <span class="at">PUBW =</span> <span class="fu">c</span>(<span class="dv">1050</span>, <span class="dv">1150</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">RES =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1200</span>), <span class="at">TULA =</span> <span class="fu">c</span>(<span class="dv">1175</span>, <span class="dv">1300</span>), <span class="at">PINE =</span> <span class="fu">c</span>(<span class="dv">1275</span>, <span class="dv">1350</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">PUBR =</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">1200</span>), <span class="at">WING =</span> <span class="fu">c</span>(<span class="dv">1100</span>, <span class="dv">1200</span>), <span class="at">WIPO =</span> <span class="fu">c</span>(<span class="dv">1125</span>, <span class="dv">1225</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">SJ =</span> <span class="fu">c</span>(<span class="dv">1200</span>, <span class="dv">1300</span>), <span class="at">LSJ =</span> <span class="fu">c</span>(<span class="dv">1250</span>, <span class="dv">1300</span>), <span class="at">SPR =</span> <span class="fu">c</span>(<span class="dv">1250</span>, <span class="dv">1300</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">PINER =</span> <span class="fu">c</span>(<span class="dv">1275</span>, <span class="dv">1325</span>), <span class="at">HESH =</span> <span class="fu">c</span>(<span class="dv">1275</span>, <span class="dv">1450</span>), <span class="at">KWAK =</span> <span class="fu">c</span>(<span class="dv">1275</span>, <span class="dv">1450</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Calculate date midpoint</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>zuni_mid <span class="ot">&lt;-</span> <span class="fu">vapply</span>(<span class="at">X =</span> zuni_dates, <span class="at">FUN =</span> mean, <span class="at">FUN.VALUE =</span> <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Calculate MCD</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>zuni_mcd <span class="ot">&lt;-</span> <span class="fu">mcd</span>(zuni_counts, <span class="at">dates =</span> zuni_mid)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(zuni_mcd)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 LZ1103 LZ1100 LZ1099 LZ1097 LZ1096 </span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1162   1138   1154   1091   1092    841</span></span></code></pre></div>
+</div>
+</div>
+<div id="event-accumulation-date" class="section level2" number="0.3">
+<h2><span class="header-section-number">0.3</span> Event &amp; Accumulation Date</h2>
+<div id="definition-1" class="section level3" number="0.3.1">
+<h3><span class="header-section-number">0.3.1</span> Definition</h3>
+<p>Event and accumulation dates are density estimates of the occupation and duration of an archaeological site <span class="citation">(L. Bellanger, Husi, and Tomassone 2006; L. Bellanger, Tomassone, and Husi 2008; Lise Bellanger and Husi 2012)</span>.</p>
+<p>The event date is an estimation of the <em>terminus post-quem</em> of an archaeological assemblage. The accumulation date represents the “chronological profile” of the assemblage. According to <span class="citation">Lise Bellanger and Husi (2012)</span>, accumulation date can be interpreted “at best […] as a formation process reflecting the duration or succession of events on the scale of archaeological time, and at worst, as imprecise dating due to contamination of the context by residual or intrusive material.” In other words, accumulation dates estimate occurrence of archaeological events and rhythms of the long term.</p>
+<div id="event-date" class="section level4" number="0.3.1.1">
+<h4><span class="header-section-number">0.3.1.1</span> Event Date</h4>
+<p>Event dates are estimated by fitting a Gaussian multiple linear regression model on the factors resulting from a correspondence analysis - somewhat similar to the idea introduced by <span class="citation">Poblome and Groenen (2003)</span>. This model results from the known dates of a selection of reliable contexts and allows to predict the event dates of the remaining assemblages.</p>
+<p>First, a correspondence analysis (CA) is carried out to summarize the information in the count matrix <span class="math inline">\(X\)</span>. The correspondence analysis of <span class="math inline">\(X\)</span> provides the coordinates of the <span class="math inline">\(m\)</span> rows along the <span class="math inline">\(q\)</span> factorial components, denoted <span class="math inline">\(f_{ik} ~\forall i \in \left[ 1,m \right], k \in \left[ 1,q \right]\)</span>.</p>
+<p>Then, assuming that <span class="math inline">\(n\)</span> assemblages are reliably dated by another source, a Gaussian multiple linear regression model is fitted on the factorial components for the <span class="math inline">\(n\)</span> dated assemblages:</p>
+<p><span class="math display">\[
+t^E_i = \beta_{0} + \sum_{k = 1}^{q} \beta_{k} f_{ik} + \epsilon_i ~\forall i \in [1,n]
+\]</span> where <span class="math inline">\(t^E_i\)</span> is the known date point estimate of the <span class="math inline">\(i\)</span>th assemblage, <span class="math inline">\(\beta_k\)</span> are the regression coefficients and <span class="math inline">\(\epsilon_i\)</span> are normally, identically and independently distributed random variables, <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\sigma^2)\)</span>.</p>
+<p>These <span class="math inline">\(n\)</span> equations are stacked together and written in matrix notation as</p>
+<p><span class="math display">\[
+t^E = F \beta + \epsilon
+\]</span></p>
+<p>where <span class="math inline">\(\epsilon \sim \mathcal{N}_{n}(0,\sigma^2 I_{n})\)</span>, <span class="math inline">\(\beta = \left[ \beta_0 \cdots \beta_q \right]&#39; \in \mathbb{R}^{q+1}\)</span> and</p>
+<p><span class="math display">\[
+F = 
+\begin{bmatrix}
+1 &amp; f_{11} &amp; \cdots &amp; f_{1q} \\
+1 &amp; f_{21} &amp; \cdots &amp; f_{2q} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+1 &amp; f_{n1} &amp; \cdots &amp; f_{nq}
+\end{bmatrix}
+\]</span></p>
+<p>Assuming that <span class="math inline">\(F&#39;F\)</span> is nonsingular, the ordinary least squares estimator of the unknown parameter vector <span class="math inline">\(\beta\)</span> is:</p>
+<p><span class="math display">\[
+\widehat{\beta} = \left( F&#39;F \right)^{-1} F&#39; t^E
+\]</span></p>
+<p>Finally, for a given vector of CA coordinates <span class="math inline">\(f_i\)</span>, the predicted event date of an assemblage <span class="math inline">\(t^E_i\)</span> is:</p>
+<p><span class="math display">\[
+\widehat{t^E_i} = f_i \hat{\beta}
+\]</span></p>
+<p>The endpoints of the <span class="math inline">\(100(1 − \alpha)\)</span>% associated prediction confidence interval are given as:</p>
+<p><span class="math display">\[
+\widehat{t^E_i} \pm t_{\alpha/2,n-q-1} \sqrt{\widehat{V}}
+\]</span></p>
+<p>where <span class="math inline">\(\widehat{V_i}\)</span> is an estimator of the variance of the prediction error: <!-- https://stats.stackexchange.com/questions/147242/how-to-calculate-the-prediction-interval-for-an-ols-multiple-regression --> <span class="math display">\[
+\widehat{V_i} = \widehat{\sigma}^2 \left( f_i^T \left( F&#39;F \right)^{-1} f_i + 1 \right)
+\]</span></p>
+<p>were <span class="math inline">\(\widehat{\sigma} = \frac{\sum_{i=1}^{n} \left( t_i - \widehat{t^E_i} \right)^2}{n - q - 1}\)</span>.</p>
+<p>The probability density of an event date <span class="math inline">\(t^E_i\)</span> can be described as a normal distribution:</p>
+<p><span class="math display">\[
+t^E_i \sim \mathcal{N}(\widehat{t^E_i},\widehat{V_i})
+\]</span></p>
+</div>
+<div id="accumulation-date" class="section level4" number="0.3.1.2">
+<h4><span class="header-section-number">0.3.1.2</span> Accumulation Date</h4>
+<p>As row (assemblages) and columns (types) CA coordinates are linked together through the so-called transition formulae, event dates for each type <span class="math inline">\(t^E_j\)</span> can be predicted following the same procedure as above.</p>
+<p>Then, the accumulation date <span class="math inline">\(t^A_i\)</span> is defined as the weighted mean of the event date of the ceramic types found in a given assemblage. The weights are the conditional frequencies of the respective types in the assemblage (akin to the MCD).</p>
+<p>The accumulation date is estimated as: <span class="math display">\[ 
+\widehat{t^A_i} = \sum_{j = 1}^{p} \widehat{t^E_j} \times \frac{x_{ij}}{x_{i \cdot}}
+\]</span></p>
+<p>The probability density of an accumulation date <span class="math inline">\(t^A_i\)</span> can be described as a Gaussian mixture:</p>
+<p><span class="math display">\[
+t^A_i \sim \frac{x_{ij}}{x_{i \cdot}} \mathcal{N}(\widehat{t^E_j},\widehat{V_j}^2)
+\]</span></p>
+<p>Interestingly, the integral of the accumulation date offers an estimates of the cumulative occurrence of archaeological events, which is close enough to the definition of the <em>tempo plot</em> introduced by <span class="citation">Dye (2016)</span>.</p>
+</div>
+</div>
+<div id="limitation-1" class="section level3" number="0.3.2">
+<h3><span class="header-section-number">0.3.2</span> Limitation</h3>
+<p>Event and accumulation dates estimation relies on the same conditions and assumptions as the matrix seriation problem. <span class="citation">Dunnell (1970)</span> summarizes these conditions and assumptions as follows.</p>
+<p>The homogeneity conditions state that all the groups included in a seriation must:</p>
+<ul>
+<li>Be of comparable duration.</li>
+<li>Belong to the same cultural tradition.</li>
+<li>Come from the same local area.</li>
+</ul>
+<p>The mathematical assumptions state that the distribution of any historical or temporal class:</p>
+<ul>
+<li>Is continuous through time.</li>
+<li>Exhibits the form of a unimodal curve.</li>
+</ul>
+<p>Theses assumptions create a distributional model and ordering is accomplished by arranging the matrix so that the class distributions approximate the required pattern. The resulting order is inferred to be chronological.</p>
+<p>Predicted dates have to be interpreted with care: these dates are highly dependent on the range of the known dates and the fit of the regression.</p>
+</div>
+<div id="usage-1" class="section level3" number="0.3.3">
+<h3><span class="header-section-number">0.3.3</span> Usage</h3>
+<p>This package provides an implementation of the chronological modeling method developed by <span class="citation">Lise Bellanger and Husi (2012)</span>. This method is slightly modified here and allows the construction of different probability density curves of archaeological assemblage dates (<em>event</em>, <em>activity</em> and <em>tempo</em>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Bellanger et al. did not publish the data supporting their demonstration: </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">## no replication of their results is possible. </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Here is a pseudo-reproduction using the zuni dataset</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Assume that some assemblages are reliably dated (this is NOT a real example)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="do">## The names of the vector entries must match the names of the assemblages</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>zuni_dates <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0569 =</span> <span class="dv">1097</span>, <span class="at">LZ0279 =</span> <span class="dv">1119</span>, <span class="at">CS16 =</span> <span class="dv">1328</span>, <span class="at">LZ0066 =</span> <span class="dv">1111</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0852 =</span> <span class="dv">1216</span>, <span class="at">LZ1209 =</span> <span class="dv">1251</span>, <span class="at">CS144 =</span> <span class="dv">1262</span>, <span class="at">LZ0563 =</span> <span class="dv">1206</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0329 =</span> <span class="dv">1076</span>, <span class="at">LZ0005Q =</span> <span class="dv">859</span>, <span class="at">LZ0322 =</span> <span class="dv">1109</span>, <span class="at">LZ0067 =</span> <span class="dv">863</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0578 =</span> <span class="dv">1180</span>, <span class="at">LZ0227 =</span> <span class="dv">1104</span>, <span class="at">LZ0610 =</span> <span class="dv">1074</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Model the event and accumulation date for each assemblage</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">event</span>(zuni_counts, <span class="at">dates =</span> zuni_dates, <span class="at">cutoff =</span> <span class="dv">90</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">get_model</span>(model))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = date ~ ., data = contexts, na.action = stats::na.omit)</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         1         2         3         4         5         6         7         8 </span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.517235 -4.017534 -0.279200  0.662137 -1.246499  0.576044  2.634482 -4.383683 </span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         9        10        11        12        13        14        15 </span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -1.093837 -0.005002  2.543773 -0.032706  3.480918 -0.759429  1.403301 </span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             Estimate Std. Error  t value Pr(&gt;|t|)    </span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Intercept) 1164.350      1.892  615.459 2.15e-13 ***</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F1          -158.314      1.472 -107.582 1.32e-09 ***</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F2            25.629      1.444   17.753 1.04e-05 ***</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F3            -5.546      1.905   -2.912   0.0333 *  </span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F4            11.416      3.407    3.351   0.0203 *  </span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F5            -2.713      2.448   -1.108   0.3183    </span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F6             2.697      1.181    2.285   0.0711 .  </span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F7             3.966      3.001    1.322   0.2435    </span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F8            11.132      2.941    3.785   0.0128 *  </span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F9            -4.886      2.020   -2.418   0.0602 .  </span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 3.669 on 5 degrees of freedom</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   (405 observations effacées parce que manquantes)</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.9997, Adjusted R-squared:  0.9992 </span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F-statistic:  1979 on 9 and 5 DF,  p-value: 2.456e-08</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate event dates</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>event <span class="ot">&lt;-</span> <span class="fu">predict_event</span>(model, <span class="at">margin =</span> <span class="dv">1</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(event)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        date lower upper error</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 1168  1158  1178     4</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1103 1143  1139  1147     1</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1100 1156  1148  1164     3</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1099 1099  1092  1106     3</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1097 1088  1080  1097     3</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1096  839   829   849     4</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate accumulation dates</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">predict_accumulation</span>(model)</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acc)</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 LZ1103 LZ1100 LZ1099 LZ1097 LZ1096 </span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1170   1140   1158   1087   1092    875</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Activity plot</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="at">type =</span> <span class="st">&quot;activity&quot;</span>, <span class="at">event =</span> <span class="cn">TRUE</span>, <span class="at">select =</span> <span class="st">&quot;LZ1105&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Tempo plot</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="at">type =</span> <span class="st">&quot;tempo&quot;</span>, <span class="at">select =</span> <span class="st">&quot;LZ1105&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Resampling methods can be used to check the stability of the resulting model. If <code>jackknife()</code> is used, one type/fabric is removed at a time and all statistics are recalculated. In this way, one can assess whether certain type/fabric has a substantial influence on the date estimate. If <code>bootstrap()</code> is used, a large number of new bootstrap assemblages is created, with the same sample size, by resampling the original assemblage with replacement. Then, examination of the bootstrap statistics makes it possible to pinpoint assemblages that require further investigation.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Check model variability</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: this may take a few seconds</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Jackknife fabrics</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>jack <span class="ot">&lt;-</span> <span class="fu">jackknife</span>(model)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(jack)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        date lower upper error  bias</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 1457  1447  1466     4  4913</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1103  948   945   952     1 -3315</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1100 1094  1086  1102     3 -1054</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1099 1253  1246  1260     3  2618</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1097  917   908   925     3 -2907</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1096 1060  1050  1070     4  3757</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Bootstrap of assemblages</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">bootstrap</span>(model, <span class="at">n =</span> <span class="dv">30</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(boot)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         min      mean  max      Q5     Q95</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 1134 1169.4000 1217 1145.45 1207.70</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1103 1072 1141.5667 1201 1102.45 1180.65</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1100 1091 1154.0000 1231 1101.45 1212.50</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1099 1089 1099.0333 1112 1089.90 1108.75</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1097  911 1079.8333 1221  979.95 1190.50</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1096  726  831.6333  924  762.00  911.40</span></span></code></pre></div>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bellanger2006" class="csl-entry">
+Bellanger, L., Ph. Husi, and R. Tomassone. 2006. <span>“Une Approche Statistique Pour La Datation de Contextes Archéologiques.”</span> <em>Revue de Statistique Appliquée</em> 54 (2): 65–81. <a href="https://doi.org/10.1111/j.1475-4754.2006.00249.x">https://doi.org/10.1111/j.1475-4754.2006.00249.x</a>.
+</div>
+<div id="ref-bellanger2012" class="csl-entry">
+Bellanger, Lise, and Philippe Husi. 2012. <span>“Statistical <span>Tool</span> for <span>Dating</span> and <span>Interpreting</span> <span>Archaeological</span> <span>Contexts</span> <span>Using</span> <span>Pottery</span>.”</span> <em>Journal of Archaeological Science</em> 39 (4): 777–90. <a href="https://doi.org/10.1016/j.jas.2011.06.031">https://doi.org/10.1016/j.jas.2011.06.031</a>.
+</div>
+<div id="ref-bellanger2008" class="csl-entry">
+Bellanger, L., R. Tomassone, and P. Husi. 2008. <span>“A <span>Statistical</span> <span>Approach</span> for <span>Dating</span> <span>Archaeological</span> <span>Contexts</span>.”</span> <em>Journal of Data Science</em> 6: 135–54.
+</div>
+<div id="ref-colman1987" class="csl-entry">
+Colman, Steven M., Kenneth L. Pierce, and Peter W. Birkeland. 1987. <span>“Suggested <span>Terminology</span> for <span>Quaternary</span> <span>Dating</span> <span>Methods</span>.”</span> <em>Quaternary Research</em> 28 (2): 314–19. <a href="https://doi.org/10.1016/0033-5894(87)90070-6">https://doi.org/10.1016/0033-5894(87)90070-6</a>.
+</div>
+<div id="ref-dean1978" class="csl-entry">
+Dean, Jeffrey S. 1978. <span>“Independent <span>Dating</span> in <span>Archaeological</span> <span>Analysis</span>.”</span> In <em>Advances in <span>Archaeological</span> <span>Method</span> and <span>Theory</span></em>, 223–55. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-003101-6.50013-5">https://doi.org/10.1016/B978-0-12-003101-6.50013-5</a>.
+</div>
+<div id="ref-dunnell1970" class="csl-entry">
+Dunnell, Robert C. 1970. <span>“Seriation <span>Method</span> and <span>Its</span> <span>Evaluation</span>.”</span> <em>American Antiquity</em> 35 (03): 305–19. <a href="https://doi.org/10.2307/278341">https://doi.org/10.2307/278341</a>.
+</div>
+<div id="ref-dye2016" class="csl-entry">
+Dye, Thomas S. 2016. <span>“Long-<span>Term</span> <span>Rhythms</span> in the <span>Development</span> of <span>Hawaiian</span> <span>Social</span> <span>Stratification</span>.”</span> <em>Journal of Archaeological Science</em> 71 (July): 1–9. <a href="https://doi.org/10.1016/j.jas.2016.05.006">https://doi.org/10.1016/j.jas.2016.05.006</a>.
+</div>
+<div id="ref-obrien2002" class="csl-entry">
+O’Brien, Michael J, and R. Lee Lyman. 2002. <em>Seriation, <span>Stratigraphy</span>, and <span>Index</span> <span>Fossils</span>: <span>The</span> <span>Backbone</span> of <span>Archaeological</span> <span>Dating</span></em>. Dordrecht: Springer.
+</div>
+<div id="ref-poblome2003" class="csl-entry">
+Poblome, J., and P. J. F. Groenen. 2003. <span>“Constrained <span>Correspondence</span> <span>Analysis</span> for <span>Seriation</span> of <span>Sagalassos</span> <span>Tablewares</span>.”</span> In <em>The <span>Digital</span> <span>Heritage</span> of <span>Archaeology</span></em>, edited by M. Doerr and A. Sarris. Hellenic Ministry of Culture.
+</div>
+<div id="ref-south1977" class="csl-entry">
+South, S. A. 1977. <em>Method and <span>Theory</span> in <span>Historical</span> <span>Archaeology</span></em>. Studies in Archeology. New York: Academic Press.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
