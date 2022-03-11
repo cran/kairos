@@ -2,7 +2,7 @@
 #' \tabular{ll}{
 #'  **Package:** \tab kairos \cr
 #'  **Type:** \tab Package \cr
-#'  **Version:** \tab 1.0.0 \cr
+#'  **Version:** \tab 1.0.1 \cr
 #'  **License:** \tab GPL-3 \cr
 #' }
 #'
@@ -44,8 +44,8 @@
 #' get_replications jackknife predict
 #' @importFrom extraDistr ptnorm
 #' @importFrom ggplot2 autoplot ggplot aes facet_wrap geom_area geom_line
-#' geom_point geom_segment scale_x_continuous scale_y_continuous
-#' scale_y_discrete theme theme_bw vars
+#' geom_point geom_segment mean_cl_normal scale_x_continuous scale_y_continuous
+#' scale_y_discrete stat_summary theme theme_bw vars
 #' @importFrom methods as callGeneric callNextMethod new setClass setGeneric
 #' setMethod validObject .valueClassTest
 #' @importFrom rlang .data
