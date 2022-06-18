@@ -5,11 +5,17 @@
 \alias{plot_mcd}
 \alias{autoplot,MeanDate-method}
 \alias{plot,MeanDate,missing-method}
+\alias{autoplot,SimulationMeanDate-method}
+\alias{plot,SimulationMeanDate,missing-method}
 \title{MCD Plot}
 \usage{
 \S4method{autoplot}{MeanDate}(object, ..., select = NULL, decreasing = TRUE)
 
 \S4method{plot}{MeanDate,missing}(x, select = NULL, decreasing = TRUE, ...)
+
+\S4method{autoplot}{SimulationMeanDate}(object, ..., select = NULL, decreasing = TRUE)
+
+\S4method{plot}{SimulationMeanDate,missing}(x, select = NULL, decreasing = TRUE, ...)
 }
 \arguments{
 \item{object, x}{A \linkS4class{MeanDate} object.}
@@ -36,7 +42,6 @@ MCD Plot
 ## Mean Ceramic Date
 ## Coerce the zuni dataset to an abundance (count) matrix
 data("zuni", package = "folio")
-counts <- as_count(zuni)
 
 ## Set the start and end dates for each ceramic type
 dates <- list(
@@ -52,12 +57,13 @@ dates <- list(
 mid <- vapply(X = dates, FUN = mean, FUN.VALUE = numeric(1))
 
 ## Calculate MCD
-mc_dates <- mcd(counts, dates = mid)
+mc_dates <- mcd(zuni[100:125, ], dates = mid)
 head(mc_dates)
 
 ## Plot
-plot(mc_dates, select = 100:125)
+plot(mc_dates)
 
+\donttest{
 ## Bootstrap resampling
 boot <- bootstrap(mc_dates, n = 30)
 head(boot)
@@ -65,6 +71,11 @@ head(boot)
 ## Jackknife resampling
 jack <- jackknife(mc_dates)
 head(jack)
+
+## Simulation
+sim <- simulate(mc_dates, n = 30, interval = "percentiles")
+plot(sim)
+}
 }
 \seealso{
 \code{\link[=mcd]{mcd()}}

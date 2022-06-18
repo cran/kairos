@@ -1,5 +1,34 @@
 # HELPERS
 
+## /!\ TEMPORARY WORKAROUND
+## TODO: remove eppm() and resample() as soon as tabula is ready
+eppm <- function(object) {
+  # Independance
+  values <- apply(
+    X = object, MARGIN = 1, FUN = function(x, column_total, grand_total) {
+      sum(x) * column_total / grand_total
+    },
+    column_total = colSums(object),
+    grand_total = sum(object)
+  )
+  # Threshold
+  threshold <- (object - t(values)) / rowSums(object)
+  threshold[threshold < 0] <- 0
+
+  dimnames(threshold) <- dimnames(object)
+  threshold
+}
+resample <- function(object, do, n, size = sum(object), ..., f = NULL) {
+  ## Validation
+  assert_count(object)
+
+  prob <- object / sum(object)
+  replicates <- stats::rmultinom(n, size = size, prob = prob)
+  values <- apply(X = replicates, MARGIN = 2, FUN = do, ...)
+  if (is.function(f)) values <- f(values)
+  values
+}
+
 #' Indices of a rolling window
 #'
 #' @param x An object.

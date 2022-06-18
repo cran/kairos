@@ -5,12 +5,6 @@ NULL
 # S4 dispatch to S3 generics ===================================================
 setGeneric("autoplot", package = "ggplot2")
 
-# Set generics from other packages =============================================
-setGeneric("bootstrap", package = "dimensio")
-setGeneric("jackknife", package = "dimensio")
-setGeneric("get_dates", package = "arkhe")
-setGeneric("get_groups", package = "arkhe")
-
 # Mutators =====================================================================
 ## Extract ---------------------------------------------------------------------
 #' Get or Set Parts of an Object
@@ -32,6 +26,20 @@ setGeneric("get_groups", package = "arkhe")
 NULL
 
 #' @rdname mutators
+#' @aliases get_dates-method
+setGeneric(
+  name = "get_dates",
+  def = function(x) standardGeneric("get_dates")
+)
+
+#' @rdname mutators
+#' @aliases get_groups-method
+setGeneric(
+  name = "get_groups",
+  def = function(x) standardGeneric("get_groups")
+)
+
+#' @rdname mutators
 #' @aliases get_model-method
 setGeneric(
   name = "get_model",
@@ -45,35 +53,62 @@ setGeneric(
   def = function(x) standardGeneric("get_weights")
 )
 
-## Subset ----------------------------------------------------------------------
-#' Extract or Replace Parts of an Object
+# Resampling methods ===========================================================
+#' Resampling Methods
 #'
-#' Operators acting on objects to extract or replace parts.
-#' @param x An object from which to extract element(s) or in which to replace
-#'  element(s).
-#' @param i A [`character`] string specifying elements to extract.
-#'  Any unambiguous substring can be given (see details).
+#' @description
+#'  * `bootstrap()` generate bootstrap estimations of a statistic.
+#'  * `jackknife()` generate jackknife estimations of a statistic.
+#' @param object An object.
+#' @param n A non-negative [`integer`] specifying the number of bootstrap
+#'  replications.
+#' @param f A [`function`] that takes a single numeric vector (the result of
+#'  the resampling procedure) as argument.
+#' @param interval A [`character`] string giving the type of confidence
+#'  interval to be returned. It must be one "`student`" (the default),
+#'  "`normal`" or "`percentiles`". Any unambiguous substring can be given.
+#' @param level A length-one [`numeric`] vector giving the confidence level.
+#' @param ... Currently not used
 #' @return
-#'  A subsetted object.
-# @example inst/examples/ex-mutators.R
+#'  If `f` is `NULL`, `bootstrap()` and `jackknife()` return a [`data.frame`]
+#'  with the following elements (else, returns the result of `f` applied to the
+#'  `n` resampled values) :
+#'  \describe{
+#'   \item{original}{The observed value.}
+#'   \item{mean}{The bootstrap/jackknife estimate of mean.}
+#'   \item{bias}{The bootstrap/jackknife estimate of bias.}
+#'   \item{error}{The boostrap/jackknife estimate of standard erro.}
+#'  }
 #' @author N. Frerebeau
 #' @docType methods
-#' @family mutators
-#' @name subset
-#' @rdname subset
+#' @family resampling methods
+#' @name resample
+#' @rdname resample
 NULL
+
+#' @rdname resample
+#' @aliases bootstrap-method
+setGeneric(
+  name = "bootstrap",
+  def = function(object, ...) standardGeneric("bootstrap")
+)
+
+#' @rdname resample
+#' @aliases jackknife-method
+setGeneric(
+  name = "jackknife",
+  def = function(object, ...) standardGeneric("jackknife")
+)
 
 # Dating Methods ===============================================================
 ## Mean Ceramic Date -----------------------------------------------------------
 #' Mean Ceramic Date
 #'
 #' Estimates the Mean Ceramic Date of an assemblage.
-#' @param object A [`numeric`] vector, a [arkhe::CountMatrix-class] or a
-#'  [MeanDate-class] object.
-#' @param dates A [`numeric`] vector of dates.
-#' @param na.rm A [`logical`] scalar: should missing values (including `NaN`) be
-#'  removed?
-#' @inheritParams dimensio::bootstrap
+#' @param object A length-\eqn{p} [`numeric`] vector, an \eqn{m \times p}{m x p}
+#'  `numeric` [`matrix`] or [`data.frame`] of count data (absolute frequencies).
+#' @param dates A length-\eqn{p} [`numeric`] vector of dates expressed in CE
+#'  years (BCE years must be given as negative numbers).
 #' @param ... Currently not used.
 #' @details
 #'  The Mean Ceramic Date (MCD) is a point estimate of the occupation of an
@@ -88,10 +123,13 @@ NULL
 #'  assemblage with replacement. MCDs are calculated for each replicates and
 #'  upper and lower boundaries of the confidence interval associated with each
 #'  MCD are then returned.
+#' @note
+#'  All results are rounded to zero decimal places (sub-annual precision does
+#'  not make sense in most situations). You can change this behavior with
+#'  `options(kairos.precision = x)` (for `x` decimal places).
 #' @return
-#'  * `mcd()` returns a single [`numeric`] value or a [MeanDate-class] object.
-#'  * `bootstrap()` and `jackknife()` return a [`data.frame`].
-#' @seealso [plot_mcd][plot()]
+#'  A single [`numeric`] value or a [MeanDate-class] object.
+#' @seealso [plot_mcd][plot()], [bootstrap()], [jackknife()], [simulate()]
 #' @references
 #'  South, S. A. (1977). *Method and Theory in Historical Archaeology*.
 #'  New York: Academic Press.
@@ -113,10 +151,12 @@ setGeneric(
 #'  * `event()` fit a date event model.
 #'  * `predict_event()` and `predict_accumulation()` estimates the event and
 #'    accumulation dates of an assemblage.
-#' @param object A [arkhe::CountMatrix-class] or a [EventDate-class] object.
-#' @param data A [arkhe::CountMatrix-class] object for which to predict event
-#'  and accumulation dates.
-#' @param dates A [`numeric`] vector of dates. If named, the names must match
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
+#' @param data A `numeric` [`matrix`] or a [`data.frame`] of count data
+#'  (absolute frequencies)for which to predict event and accumulation dates.
+#' @param dates A [`numeric`] vector of dates expressed in CE years (BCE years
+#'  must be given as negative numbers). If named, the names must match
 #'  the row names of `object`.
 #' @param level A length-one [`numeric`] vector giving the confidence level.
 #' @param cutoff An [`integer`] giving the cumulative percentage of variance
@@ -177,6 +217,10 @@ setGeneric(
 #'   \item{`Q95`}{Sample quantile to 0.95 probability.}
 #'  }
 #' @note
+#'  All results are rounded to zero decimal places (sub-annual precision does
+#'  not make sense in most situations). You can change this behavior with
+#'  `options(kairos.precision = x)` (for `x` decimal places).
+#'
 #'  Bellanger *et al.* did not publish the data supporting their demonstration:
 #'  no replication of their results is possible. This implementation must be
 #'  considered **experimental** and subject to major changes in a future
@@ -366,15 +410,16 @@ setGeneric(
 ## Apportion -------------------------------------------------------------------
 #' Chronological Apportioning
 #'
-#' @param object An \eqn{m \times p}{m x p} [arkhe::CountMatrix-class] object.
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
 #' @param s0 A length-\eqn{m} [`numeric`] vector giving the site beginning dates
-#'  (in years CE).
+#'  expressed in CE years (BCE years must be given as negative numbers).
 #' @param s1 A length-\eqn{m} [`numeric`] vector giving the site end dates
-#'  (in years CE).
+#'  expressed in CE years (BCE years must be given as negative numbers).
 #' @param t0 A length-\eqn{p} [`numeric`] vector giving the type beginning dates
-#'  (in years CE).
+#'  expressed in CE years (BCE years must be given as negative numbers).
 #' @param t1 A length-\eqn{p} [`numeric`] vector giving the type end dates
-#'  (in years CE).
+#'  expressed in CE years (BCE years must be given as negative numbers).
 #' @param from A length-one [`numeric`] vector giving the beginning of the
 #'  period of interest (in years CE).
 #' @param to A length-one [`numeric`] vector giving the end of the period of
@@ -413,8 +458,10 @@ setGeneric(
 ## Frequency Increment Test ----------------------------------------------------
 #' Frequency Increment Test
 #'
-#' @param object A [arkhe::CountMatrix-class] object.
-#' @param dates A [`numeric`] vector of dates.
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
+#' @param dates A [`numeric`] vector of dates expressed in CE years (BCE years
+#'  must be given as negative numbers).
 #' @param ... Currently not used.
 #' @details
 #'  The Frequency Increment Test (FIT) rejects neutrality if the distribution
@@ -444,11 +491,12 @@ setGeneric(
 )
 
 # Plot =========================================================================
-## CountMatrix -----------------------------------------------------------------
+## matrix ----------------------------------------------------------------------
 #' Abundance vs Time Plot
 #'
 #' Produces an abundance *vs* time diagram.
-#' @param object A [CountMatrix-class] object.
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
 #' @param dates A [`numeric`] vector of dates.
 #' @param facet A [`logical`] scalar: should a matrix of panels defined by
 #'  type/taxon be drawn?
@@ -602,3 +650,167 @@ NULL
 #' @name plot_fit
 #' @rdname plot_fit
 NULL
+
+# Seriation Methods ============================================================
+#' Matrix Seriation
+#'
+#' @description
+#'  * `seriate_*()` computes a permutation order for rows and/or columns.
+#'  * `permute()` rearranges a data matrix according to a permutation order.
+#'  * `get_order()` returns the seriation order for rows and columns.
+#' @param object,x An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
+#' @param order A [PermutationOrder-class] object giving the permutation
+#'  order for rows and columns.
+#' @param EPPM A [`logical`] scalar: should the seriation be computed on EPPM
+#'  instead of raw data?
+#' @param margin A [`numeric`] vector giving the subscripts which the
+#'  rearrangement will be applied over: `1` indicates rows, `2` indicates
+#'  columns, `c(1, 2)` indicates rows then columns, `c(2, 1)` indicates columns
+#'  then rows.
+#' @param axes An [`integer`] vector giving the subscripts of the CA axes to be
+#'  used.
+#' @param stop An [`integer`] giving the stopping rule (i.e. maximum number of
+#'  iterations) to avoid infinite loop.
+#' @param cutoff A function that takes a numeric vector as argument and returns
+#'  a single numeric value (see below).
+#' @param n A non-negative [`integer`] giving the number of bootstrap
+#'  replications.
+#' @param ... Further arguments to be passed to internal methods.
+#' @section Seriation:
+#'  The matrix seriation problem in archaeology is based on three conditions
+#'  and two assumptions, which Dunell (1970) summarizes as follows.
+#'
+#'  The homogeneity conditions state that all the groups included in a
+#'  seriation must:
+#'  \enumerate{
+#'   \item{Be of comparable duration.}
+#'   \item{Belong to the same cultural tradition.}
+#'   \item{Come from the same local area.}
+#'  }
+#'
+#'  The mathematical assumptions state that the distribution of any historical
+#'  or temporal class:
+#'  \enumerate{
+#'   \item{Is continuous through time.}
+#'   \item{Exhibits the form of a unimodal curve.}
+#'  }
+#'  Theses assumptions create a distributional model and ordering is
+#'  accomplished by arranging the matrix so that the class distributions
+#'  approximate the required pattern. The resulting order is inferred
+#'  to be chronological.
+#'
+#'  The following seriation methods are available:
+#'  \describe{
+#'   \item{`seriate_average()`}{Correspondence analysis-based seriation
+#'   (average ranking). Correspondence analysis (CA) is an effective method for
+#'   the seriation of archaeological assemblages. The order of the rows and
+#'   columns is given by the coordinates along one dimension of the CA space,
+#'   assumed to account for temporal variation. The direction of temporal change
+#'   within the correspondence analysis space is arbitrary: additional
+#'   information is needed to determine the actual order in time.}
+#'   \item{`seriate_rank()`}{Reciprocal ranking seriation. These procedures
+#'   iteratively rearrange rows and/or columns according to their weighted rank
+#'   in the data matrix until convergence.
+#'   Note that this procedure could enter into an infinite loop.
+#'   If no convergence is reached before the maximum number of iterations, it
+#'   stops with a warning.}
+#'  }
+#' @section Correspondence Analysis:
+#'  `bootstrap()` allows to identify samples that are subject to
+#'  sampling error or samples that have underlying structural relationships
+#'  and might be influencing the ordering along the CA space.
+#'
+#'  This relies on a partial bootstrap approach to CA-based seriation where each
+#'  sample is replicated `n` times. The maximum dimension length of
+#'  the convex hull around the sample point cloud allows to remove samples for
+#'  a given `cutoff` value.
+#'
+#'  According to Peebles and Schachner (2012), "\[this\] point removal procedure
+#'  \[results in\] a reduced dataset where the position of individuals within the
+#'  CA are highly stable and which produces an ordering consistent with the
+#'  assumptions of frequency seriation."
+#' @return
+#'  * `seriate_*()` returns a [PermutationOrder-class] object.
+#'  * `permute()` returns either a permuted `matrix` or a permuted `data.frame`
+#'    (the same as `object`).
+#'  * `bootstrap()` returns a [RefineCA-class] object.
+#' @references
+#'  Desachy, B. (2004). Le sériographe EPPM: un outil informatisé de sériation
+#'  graphique pour tableaux de comptages. *Revue archéologique de Picardie*,
+#'  3(1), 39-56. \doi{10.3406/pica.2004.2396}.
+#'
+#'  Dunnell, R. C. (1970). Seriation Method and Its Evaluation. *American
+#'  Antiquity*, 35(03), 305-319. \doi{10.2307/278341}.
+#'
+#'  Ihm, P. (2005). A Contribution to the History of Seriation in Archaeology.
+#'  In C. Weihs & W. Gaul (Eds.), *Classification: The Ubiquitous
+#'  Challenge*. Berlin Heidelberg: Springer, p. 307-316.
+#'  \doi{10.1007/3-540-28084-7_34}.
+#'
+#'  Peeples, M. A., & Schachner, G. (2012). Refining correspondence
+#'  analysis-based ceramic seriation of regional data sets. *Journal of
+#'  Archaeological Science*, 39(8), 2818-2827.
+#'  \doi{10.1016/j.jas.2012.04.040}.
+#' @seealso [dimensio::ca()]
+#' @example inst/examples/ex-seriation.R
+#' @author N. Frerebeau
+#' @family seriation methods
+#' @docType methods
+#' @name seriation
+#' @rdname seriation
+NULL
+
+#' @rdname seriation
+#' @aliases seriate_average-method
+setGeneric(
+  name = "seriate_average",
+  def = function(object, ...) standardGeneric("seriate_average"),
+  valueClass = "PermutationOrder"
+)
+
+#' @rdname seriation
+#' @aliases seriate_rank-method
+setGeneric(
+  name = "seriate_rank",
+  def = function(object, ...) standardGeneric("seriate_rank"),
+  valueClass = "PermutationOrder"
+)
+
+#' @rdname seriation
+#' @aliases refine-method
+setGeneric(
+  name = "refine",
+  def = function(object, ...) standardGeneric("refine"),
+  valueClass = "RefineCA"
+)
+
+# @rdname seriation
+# @aliases seriate_constrain-method
+# setGeneric(
+#   name = "seriate_constrain",
+#   def = function(object, constrain, ...) standardGeneric("seriate_constrain"),
+#   valueClass = "PermutationOrder"
+# )
+
+# @rdname seriation
+# @aliases seriate_idds-method
+# setGeneric(
+#   name = "seriate_idds",
+#   def = function(object, ...) standardGeneric("seriate_idds"),
+#   valueClass = "PermutationOrder"
+# )
+
+#' @rdname seriation
+#' @aliases permute-method
+setGeneric(
+  name = "permute",
+  def = function(object, order, ...) standardGeneric("permute")
+)
+
+#' @rdname seriation
+#' @aliases get_order-method
+setGeneric(
+  name = "get_order",
+  def = function(x, ...) standardGeneric("get_order")
+)

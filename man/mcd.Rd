@@ -5,59 +5,29 @@
 \alias{mcd}
 \alias{mcd-method}
 \alias{mcd,numeric,numeric-method}
-\alias{mcd,CountMatrix,numeric-method}
-\alias{bootstrap,MeanDate-method}
-\alias{jackknife,MeanDate-method}
+\alias{mcd,data.frame,numeric-method}
+\alias{mcd,matrix,numeric-method}
 \title{Mean Ceramic Date}
 \usage{
 mcd(object, dates, ...)
 
-\S4method{mcd}{numeric,numeric}(object, dates, na.rm = FALSE)
+\S4method{mcd}{numeric,numeric}(object, dates)
 
-\S4method{mcd}{CountMatrix,numeric}(object, dates)
+\S4method{mcd}{data.frame,numeric}(object, dates)
 
-\S4method{bootstrap}{MeanDate}(
-  object,
-  level = 0.95,
-  type = c("student", "normal"),
-  probs = c(0.25, 0.5, 0.75),
-  n = 1000
-)
-
-\S4method{jackknife}{MeanDate}(object)
+\S4method{mcd}{matrix,numeric}(object, dates)
 }
 \arguments{
-\item{object}{A \code{\link{numeric}} vector, a \link[arkhe:CountMatrix-class]{arkhe::CountMatrix} or a
-\linkS4class{MeanDate} object.}
+\item{object}{A length-\eqn{p} \code{\link{numeric}} vector, an \eqn{m \times p}{m x p}
+\code{numeric} \code{\link{matrix}} or \code{\link{data.frame}} of count data (absolute frequencies).}
 
-\item{dates}{A \code{\link{numeric}} vector of dates.}
+\item{dates}{A length-\eqn{p} \code{\link{numeric}} vector of dates expressed in CE
+years (BCE years must be given as negative numbers).}
 
 \item{...}{Currently not used.}
-
-\item{na.rm}{A \code{\link{logical}} scalar: should missing values (including \code{NaN}) be
-removed?}
-
-\item{level}{A length-one \code{\link{numeric}} vector giving the confidence level.
-Must be a single number between \eqn{0} and \eqn{1}. If \code{NULL}, no
-confidence interval are computed.}
-
-\item{type}{A \code{\link{character}} string giving the type of confidence
-interval to be returned. It must be one "\code{student}" (default) or
-"\code{normal}". Any unambiguous substring can be given. Only used if \code{level}
-is not \code{NULL}.``}
-
-\item{probs}{A \code{\link{numeric}} vector of probabilities with values in
-\eqn{[0,1]} (see \code{\link[stats:quantile]{stats::quantile()}}). If \code{NULL}, quantiles are not
-computed.}
-
-\item{n}{A non-negative \code{\link{integer}} giving the number of bootstrap
-replications.}
 }
 \value{
-\itemize{
-\item \code{mcd()} returns a single \code{\link{numeric}} value or a \linkS4class{MeanDate} object.
-\item \code{bootstrap()} and \code{jackknife()} return a \code{\link{data.frame}}.
-}
+A single \code{\link{numeric}} value or a \linkS4class{MeanDate} object.
 }
 \description{
 Estimates the Mean Ceramic Date of an assemblage.
@@ -76,11 +46,15 @@ assemblage with replacement. MCDs are calculated for each replicates and
 upper and lower boundaries of the confidence interval associated with each
 MCD are then returned.
 }
+\note{
+All results are rounded to zero decimal places (sub-annual precision does
+not make sense in most situations). You can change this behavior with
+\code{options(kairos.precision = x)} (for \code{x} decimal places).
+}
 \examples{
 ## Mean Ceramic Date
 ## Coerce the zuni dataset to an abundance (count) matrix
 data("zuni", package = "folio")
-counts <- as_count(zuni)
 
 ## Set the start and end dates for each ceramic type
 dates <- list(
@@ -96,12 +70,13 @@ dates <- list(
 mid <- vapply(X = dates, FUN = mean, FUN.VALUE = numeric(1))
 
 ## Calculate MCD
-mc_dates <- mcd(counts, dates = mid)
+mc_dates <- mcd(zuni[100:125, ], dates = mid)
 head(mc_dates)
 
 ## Plot
-plot(mc_dates, select = 100:125)
+plot(mc_dates)
 
+\donttest{
 ## Bootstrap resampling
 boot <- bootstrap(mc_dates, n = 30)
 head(boot)
@@ -109,13 +84,18 @@ head(boot)
 ## Jackknife resampling
 jack <- jackknife(mc_dates)
 head(jack)
+
+## Simulation
+sim <- simulate(mc_dates, n = 30, interval = "percentiles")
+plot(sim)
+}
 }
 \references{
 South, S. A. (1977). \emph{Method and Theory in Historical Archaeology}.
 New York: Academic Press.
 }
 \seealso{
-\link[=plot]{plot_mcd}
+\link[=plot]{plot_mcd}, \code{\link[=bootstrap]{bootstrap()}}, \code{\link[=jackknife]{jackknife()}}, \code{\link[=simulate]{simulate()}}
 
 Other dating methods: 
 \code{\link{event}()}

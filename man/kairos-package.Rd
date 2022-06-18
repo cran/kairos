@@ -7,15 +7,15 @@
 \alias{kairos}
 \title{kairos: Analysis of Chronological Patterns from Archaeological Count Data}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A toolkit for absolute dating and analysis of chronological patterns. This package includes functions for chronological modeling and dating of archaeological assemblages from count data. It allows to compute time point estimates and density estimates of the occupation and duration of an archaeological site.
+A toolkit for absolute dating and analysis of chronological patterns. This package includes functions for chronological modeling and dating of archaeological assemblages from count data. It provides methods for matrix seriation. It also allows to compute time point estimates and density estimates of the occupation and duration of an archaeological site.
 }
 \details{
 \tabular{ll}{
 \strong{Package:} \tab kairos \cr
 \strong{Type:} \tab Package \cr
-\strong{Version:} \tab 1.0.1 \cr
+\strong{Version:} \tab 1.1.0 \cr
 \strong{License:} \tab GPL-3 \cr
 }
 }

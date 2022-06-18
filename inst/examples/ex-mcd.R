@@ -1,7 +1,6 @@
 ## Mean Ceramic Date
 ## Coerce the zuni dataset to an abundance (count) matrix
 data("zuni", package = "folio")
-counts <- as_count(zuni)
 
 ## Set the start and end dates for each ceramic type
 dates <- list(
@@ -17,12 +16,13 @@ dates <- list(
 mid <- vapply(X = dates, FUN = mean, FUN.VALUE = numeric(1))
 
 ## Calculate MCD
-mc_dates <- mcd(counts, dates = mid)
+mc_dates <- mcd(zuni[100:125, ], dates = mid)
 head(mc_dates)
 
 ## Plot
-plot(mc_dates, select = 100:125)
+plot(mc_dates)
 
+\donttest{
 ## Bootstrap resampling
 boot <- bootstrap(mc_dates, n = 30)
 head(boot)
@@ -30,3 +30,8 @@ head(boot)
 ## Jackknife resampling
 jack <- jackknife(mc_dates)
 head(jack)
+
+## Simulation
+sim <- simulate(mc_dates, n = 30, interval = "percentiles")
+plot(sim)
+}

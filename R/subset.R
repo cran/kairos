@@ -3,9 +3,12 @@
 NULL
 
 # Extract ======================================================================
+## [ ---------------------------------------------------------------------------
+
+## [[ --------------------------------------------------------------------------
 #' Extract Parts of an Object
 #'
-#' @inheritParams subset
+#' @inheritParams [[
 #' @author N. Frerebeau
 #' @keywords internal
 #' @noRd
@@ -18,10 +21,34 @@ extract_slot <- function(x, i) {
 }
 
 #' @export
-#' @rdname subset
+#' @describeIn IncrementTest-class Extracts information from a slot selected
+#'  by subscript i. i is a length-one character vector. Returns the
+#'  corresponding slot values.
 #' @aliases [[,IncrementTest,ANY,missing-method
 setMethod(
   f = "[[",
   signature = c(x = "IncrementTest", i = "ANY", j = "missing"),
+  definition = extract_slot
+)
+
+#' @export
+#' @describeIn PermutationOrder-class Extracts information from a slot selected
+#'  by subscript i. i is a length-one character vector. Returns the
+#'  corresponding slot values.
+#' @aliases [[,PermutationOrder,ANY,missing-method
+setMethod(
+  f = "[[",
+  signature = c(x = "PermutationOrder", i = "ANY", j = "missing"),
+  definition = extract_slot
+)
+
+#' @export
+#' @describeIn RefineCA-class Extracts information from a slot selected
+#'  by subscript i. i is a length-one character vector. Returns the
+#'  corresponding slot values.
+#' @aliases [[,RefineCA,ANY,missing-method
+setMethod(
+  f = "[[",
+  signature = c(x = "RefineCA", i = "ANY", j = "missing"),
   definition = extract_slot
 )

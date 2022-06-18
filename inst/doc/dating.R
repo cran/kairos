@@ -13,7 +13,6 @@ library(folio) # Datasets
 ## ----mcd-model, fig.width=7, fig.height=3.5, fig.align="center"---------------
 ## Coerce the zuni dataset to an abundance (count) matrix
 data("zuni", package = "folio")
-zuni_counts <- as_count(zuni)
 
 ## Set the start and end dates for each ceramic type
 zuni_dates <- list(
@@ -29,8 +28,10 @@ zuni_dates <- list(
 zuni_mid <- vapply(X = zuni_dates, FUN = mean, FUN.VALUE = numeric(1))
 
 ## Calculate MCD
-zuni_mcd <- mcd(zuni_counts, dates = zuni_mid)
+zuni_mcd <- mcd(zuni, dates = zuni_mid)
 head(zuni_mcd)
+
+plot(zuni_mcd, select = 100:125)
 
 ## ----event-model--------------------------------------------------------------
 ## Bellanger et al. did not publish the data supporting their demonstration: 
@@ -47,7 +48,7 @@ zuni_dates <- c(
 )
 
 ## Model the event and accumulation date for each assemblage
-model <- event(zuni_counts, dates = zuni_dates, cutoff = 90)
+model <- event(zuni, dates = zuni_dates, cutoff = 90)
 summary(get_model(model))
 
 ## Estimate event dates
