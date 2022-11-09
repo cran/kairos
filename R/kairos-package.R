@@ -2,7 +2,7 @@
 #' \tabular{ll}{
 #'  **Package:** \tab kairos \cr
 #'  **Type:** \tab Package \cr
-#'  **Version:** \tab 1.1.0 \cr
+#'  **Version:** \tab 1.2.0 \cr
 #'  **License:** \tab GPL-3 \cr
 #' }
 #'
@@ -28,7 +28,7 @@
 #' Nicolas Frerebeau\cr
 #' \email{nicolas.frerebeau@@u-bordeaux-montaigne.fr}
 #'
-#' IRAMAT-CRP2A (UMR 5060)\cr
+#' Archéosciences Bordeaux (UMR 6034)\cr
 #' Maison de l'Archéologie\cr
 #' Université Bordeaux Montaigne\cr
 #' F-33607 Pessac cedex\cr
@@ -40,13 +40,13 @@
 "_PACKAGE"
 
 #' @import arkhe
-#' @importFrom boot boot
-#' @importFrom dimensio bootstrap ca get_coordinates get_eigenvalues
+#' @importFrom dimensio ca get_coordinates get_eigenvalues
 #' get_replications predict
 #' @importFrom extraDistr ptnorm
 #' @importFrom ggplot2 autoplot ggplot aes facet_wrap geom_area geom_line
 #' geom_point geom_segment labs mean_cl_normal scale_x_continuous
 #' scale_y_continuous scale_y_discrete stat_summary theme theme_bw vars
+#' @importFrom grDevices xy.coords
 #' @importFrom Hmisc smean.cl.normal
 #' @importFrom methods as callGeneric callNextMethod new setClass setGeneric
 #' setMethod validObject .valueClassTest

@@ -1,3 +1,11 @@
+# kairos 1.2.0
+## New classes and methods
+* Add `seriate_refine()` method for `PermutationOrder` objects.
+
+## Bugfixes & changes
+* Deprecate `refine()`.
+* `cutoff` argument of `event()` is defunct (use `rank` instead).
+
 # kairos 1.1.0
 ## New classes and methods
 * Add seriation methods: `seriate_rank()`, `seriate_average()`, `permute()`, `get_order()`.

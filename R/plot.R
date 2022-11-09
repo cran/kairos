@@ -106,7 +106,7 @@ autoplot.IncrementTest <- function(object, ..., level = 0.95, roll = FALSE,
     gg_roll <- ggplot2::geom_line(
       data = data[data$signature_sub, ],
       mapping = ggplot2::aes(group = .data$column),
-      size = 5, colour = "grey80", lineend = "round"
+      linewidth = 5, colour = "grey80", lineend = "round"
     )
   } else {
     gg_roll <- NULL
@@ -150,7 +150,7 @@ setMethod("plot", c(x = "IncrementTest", y = "missing"), plot.IncrementTest)
 ## * Must return a data.frame
 ## * Must preserve original ordering
 prepare_time <- function(object, dates) {
-  data <- arkhe::as_long(object, factor = TRUE)
+  data <- arkhe::to_long(object, factor = TRUE)
 
   data$x <- data$dates <- dates
   data$y <- data$value

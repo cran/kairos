@@ -4,6 +4,8 @@ NULL
 
 # S4 dispatch to S3 generics ===================================================
 setGeneric("autoplot", package = "ggplot2")
+setGeneric("jackknife", package = "arkhe")
+setGeneric("bootstrap", package = "arkhe")
 
 # Mutators =====================================================================
 ## Extract ---------------------------------------------------------------------
@@ -54,12 +56,12 @@ setGeneric(
 )
 
 # Resampling methods ===========================================================
-#' Resampling Methods
+#' Resample Mean Ceramic Dates
 #'
 #' @description
-#'  * `bootstrap()` generate bootstrap estimations of a statistic.
-#'  * `jackknife()` generate jackknife estimations of a statistic.
-#' @param object An object.
+#'  * `bootstrap()` generate bootstrap estimations of an [MCD][mcd()].
+#'  * `jackknife()` generate jackknife estimations of an [MCD][mcd()].
+#' @param object A [MeanDate-class] object (typically returned by [mcd()]).
 #' @param n A non-negative [`integer`] specifying the number of bootstrap
 #'  replications.
 #' @param f A [`function`] that takes a single numeric vector (the result of
@@ -68,7 +70,6 @@ setGeneric(
 #'  interval to be returned. It must be one "`student`" (the default),
 #'  "`normal`" or "`percentiles`". Any unambiguous substring can be given.
 #' @param level A length-one [`numeric`] vector giving the confidence level.
-#' @param ... Currently not used
 #' @return
 #'  If `f` is `NULL`, `bootstrap()` and `jackknife()` return a [`data.frame`]
 #'  with the following elements (else, returns the result of `f` applied to the
@@ -82,23 +83,61 @@ setGeneric(
 #' @author N. Frerebeau
 #' @docType methods
 #' @family resampling methods
-#' @name resample
-#' @rdname resample
+#' @name resample_mcd
+#' @rdname resample_mcd
 NULL
 
-#' @rdname resample
-#' @aliases bootstrap-method
-setGeneric(
-  name = "bootstrap",
-  def = function(object, ...) standardGeneric("bootstrap")
-)
-
-#' @rdname resample
-#' @aliases jackknife-method
-setGeneric(
-  name = "jackknife",
-  def = function(object, ...) standardGeneric("jackknife")
-)
+#' Resample Event Dates
+#'
+#' @description
+#'  * `bootstrap()` generate bootstrap estimations of an [event][event()].
+#'  * `jackknife()` generate jackknife estimations of an [event][event()].
+#' @param object An [EventDate-class] object (typically returned by [event()]).
+#' @param n A non-negative [`integer`] specifying the number of bootstrap
+#'  replications.
+#' @param level A length-one [`numeric`] vector giving the confidence level.
+#' @param probs A [`numeric`] vector of probabilities with values in
+#'  \eqn{[0,1]}.
+#' @param progress A [`logical`] scalar: should a progress bar be displayed?
+#' @param ... Further arguments to be passed to internal methods.
+#' @details
+#'  If `jackknife()` is used, one type/fabric is removed at a
+#'  time and all statistics are recalculated. In this way, one can assess
+#'  whether certain type/fabric has a substantial influence on the date
+#'  estimate.
+#'  A three columns `data.frame` is returned, giving the results of
+#'  the resampling procedure (jackknifing fabrics) for each assemblage (in rows)
+#'  with the following columns:
+#'  \describe{
+#'   \item{`mean`}{The jackknife mean (event date).}
+#'   \item{`bias`}{The jackknife estimate of bias.}
+#'   \item{`error`}{The standard error of predicted means.}
+#'  }
+#'
+#'  If `bootstrap()` is used, a large number of new bootstrap assemblages is
+#'  created, with the same sample size, by resampling each of the original
+#'  assemblage with replacement. Then, examination of the bootstrap statistics
+#'  makes it possible to pinpoint assemblages that require further
+#'  investigation.
+#'
+#'  A five columns `data.frame` is returned, giving the bootstrap
+#'  distribution statistics for each replicated assemblage (in rows)
+#'  with the following columns:
+#'  \describe{
+#'   \item{`min`}{Minimum value.}
+#'   \item{`mean`}{Mean value (event date).}
+#'   \item{`max`}{Maximum value.}
+#'   \item{`Q5`}{Sample quantile to 0.05 probability.}
+#'   \item{`Q95`}{Sample quantile to 0.95 probability.}
+#'  }
+#' @return
+#'  A [`data.frame`].
+#' @author N. Frerebeau
+#' @docType methods
+#' @family resampling methods
+#' @name resample_event
+#' @rdname resample_event
+NULL
 
 # Dating Methods ===============================================================
 ## Mean Ceramic Date -----------------------------------------------------------
@@ -129,7 +168,8 @@ setGeneric(
 #'  `options(kairos.precision = x)` (for `x` decimal places).
 #' @return
 #'  A single [`numeric`] value or a [MeanDate-class] object.
-#' @seealso [plot_mcd][plot()], [bootstrap()], [jackknife()], [simulate()]
+#' @seealso [plot()][plot_mcd], [bootstrap()][resample_mcd],
+#'  [jackknife()][resample_mcd], [simulate()][resample_mcd]
 #' @references
 #'  South, S. A. (1977). *Method and Theory in Historical Archaeology*.
 #'  New York: Academic Press.
@@ -159,14 +199,15 @@ setGeneric(
 #'  must be given as negative numbers). If named, the names must match
 #'  the row names of `object`.
 #' @param level A length-one [`numeric`] vector giving the confidence level.
+#' @param rank An [`integer`] specifying the number of CA factorial components
+#'  to be use for linear model fitting (see details).
 #' @param cutoff An [`integer`] giving the cumulative percentage of variance
 #'  used to select CA factorial components for linear model fitting (see
 #'  details). All compounds with a cumulative percentage of variance of less
 #'  than the `cutoff` value will be retained.
+#'  This argument is defunct: use `rank` instead.
 #' @param margin A [`numeric`] vector giving the subscripts which the prediction
 #'  will be applied over: `1` indicates rows, `2` indicates columns.
-#' @param progress A [`logical`] scalar: should a progress bar be displayed?
-#' @inheritParams dimensio::bootstrap
 #' @param ... Further arguments to be passed to internal methods.
 #' @details
 #'  This is an implementation of the chronological modeling method proposed by
@@ -185,37 +226,7 @@ setGeneric(
 #'  of the long term.
 #'
 #'  This method relies on strong archaeological and statistical assumptions
-#'  (see `vignette("kairos")`).
-#' @section Resampling:
-#'  If `jackknife()` is used, one type/fabric is removed at a
-#'  time and all statistics are recalculated. In this way, one can assess
-#'  whether certain type/fabric has a substantial influence on the date
-#'  estimate.
-#'  A three columns `data.frame` is returned, giving the results of
-#'  the resampling procedure (jackknifing fabrics) for each assemblage (in rows)
-#'  with the following columns:
-#'  \describe{
-#'   \item{`mean`}{The jackknife mean (event date).}
-#'   \item{`bias`}{The jackknife estimate of bias.}
-#'   \item{`error`}{The standard error of predicted means.}
-#'  }
-#'
-#'  If `bootstrap()` is used, a large number of new bootstrap assemblages is
-#'  created, with the same sample size, by resampling each of the original
-#'  assemblage with replacement. Then, examination of the bootstrap statistics
-#'  makes it possible to pinpoint assemblages that require further
-#'  investigation.
-#'
-#'  A five columns `data.frame` is returned, giving the bootstrap
-#'  distribution statistics for each replicated assemblage (in rows)
-#'  with the following columns:
-#'  \describe{
-#'   \item{`min`}{Minimum value.}
-#'   \item{`mean`}{Mean value (event date).}
-#'   \item{`max`}{Maximum value.}
-#'   \item{`Q5`}{Sample quantile to 0.05 probability.}
-#'   \item{`Q95`}{Sample quantile to 0.95 probability.}
-#'  }
+#'  (see `vignette("event")`).
 #' @note
 #'  All results are rounded to zero decimal places (sub-annual precision does
 #'  not make sense in most situations). You can change this behavior with
@@ -229,8 +240,8 @@ setGeneric(
 #'  * `event()` returns an [EventDate-class] object.
 #'  * `predict_event()` returns a [`data.frame`].
 #'  * `predict_accumulation()` returns a [MeanDate-class] object.
-#'  * `bootstrap()` and `jackknife()` return a [`data.frame`].
-#' @seealso [plot_event][plot()]
+#' @seealso [plot()][plot_event], [jackknife()][resample_event],
+#'  [bootstrap()][resample_event]
 #' @references
 #'  Bellanger, L. & Husi, P. (2013). Mesurer et modéliser le temps inscrit dans
 #'  la matière à partir d'une source matérielle : la céramique médiévale.
@@ -259,11 +270,6 @@ setGeneric(
 #' @author N. Frerebeau
 #' @family dating methods
 #' @docType methods
-#' @name event
-#' @rdname event
-NULL
-
-#' @rdname event
 #' @aliases event-method
 setGeneric(
   name = "event",
@@ -292,10 +298,8 @@ setGeneric(
 #' Aoristic Analysis
 #'
 #' Computes the aoristic sum.
-#' @param x A [`numeric`] vector. If `y` is missing, must be a [`list`] (or a
-#'  [`data.frame`]) with `numeric` components (columns) `from` and `to`.
-#' @param y A [`numeric`] vector. If missing, an attempt is made to interpret
-#'  `x` in a suitable way.
+#' @param x,y A [`numeric`] vector. If `y` is missing, an attempt is made to
+#'  interpret `x` in a suitable way (see [grDevices::xy.coords()]).
 #' @param step A length-one [`integer`] vector giving the step size, i.e. the
 #'  width of each time step in the time series (in years CE; defaults to
 #'  \eqn{1} - i.e. annual level).
@@ -359,11 +363,6 @@ setGeneric(
 #' @author N. Frerebeau
 #' @family chronological analysis
 #' @docType methods
-#' @name aoristic
-#' @rdname aoristic
-NULL
-
-#' @rdname aoristic
 #' @aliases aoristic-method
 setGeneric(
   name = "aoristic",
@@ -395,11 +394,6 @@ setGeneric(
 #' @author N. Frerebeau
 #' @family chronological analysis
 #' @docType methods
-#' @name roc
-#' @rdname roc
-NULL
-
-#' @rdname roc
 #' @aliases roc-method
 setGeneric(
   name = "roc",
@@ -443,11 +437,6 @@ setGeneric(
 #' @author N. Frerebeau
 #' @family chronological analysis
 #' @docType methods
-#' @name apportion
-#' @rdname apportion
-NULL
-
-#' @rdname apportion
 #' @aliases apportion-method
 setGeneric(
   name = "apportion",
@@ -478,11 +467,6 @@ setGeneric(
 #' @author N. Frerebeau
 #' @family chronological analysis
 #' @docType methods
-#' @name fit
-#' @rdname fit
-NULL
-
-#' @rdname fit
 #' @aliases fit-method
 setGeneric(
   name = "fit",
@@ -507,11 +491,6 @@ setGeneric(
 #' @author N. Frerebeau
 #' @family plotting methods
 #' @docType methods
-#' @name plot_time
-#' @rdname plot_time
-NULL
-
-#' @rdname plot_time
 #' @aliases plot_time-method
 setGeneric(
   name = "plot_time",
@@ -652,89 +631,29 @@ NULL
 NULL
 
 # Seriation Methods ============================================================
-#' Matrix Seriation
+## Reciprocal ranking ----------------------------------------------------------
+#' Reciprocal Ranking Seriation
 #'
-#' @description
-#'  * `seriate_*()` computes a permutation order for rows and/or columns.
-#'  * `permute()` rearranges a data matrix according to a permutation order.
-#'  * `get_order()` returns the seriation order for rows and columns.
-#' @param object,x An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
 #'  [`data.frame`] of count data (absolute frequencies).
-#' @param order A [PermutationOrder-class] object giving the permutation
-#'  order for rows and columns.
 #' @param EPPM A [`logical`] scalar: should the seriation be computed on EPPM
 #'  instead of raw data?
 #' @param margin A [`numeric`] vector giving the subscripts which the
 #'  rearrangement will be applied over: `1` indicates rows, `2` indicates
 #'  columns, `c(1, 2)` indicates rows then columns, `c(2, 1)` indicates columns
 #'  then rows.
-#' @param axes An [`integer`] vector giving the subscripts of the CA axes to be
-#'  used.
 #' @param stop An [`integer`] giving the stopping rule (i.e. maximum number of
 #'  iterations) to avoid infinite loop.
-#' @param cutoff A function that takes a numeric vector as argument and returns
-#'  a single numeric value (see below).
-#' @param n A non-negative [`integer`] giving the number of bootstrap
-#'  replications.
-#' @param ... Further arguments to be passed to internal methods.
-#' @section Seriation:
-#'  The matrix seriation problem in archaeology is based on three conditions
-#'  and two assumptions, which Dunell (1970) summarizes as follows.
+#' @param ... Currently not used.
+#' @details
+#'  This procedure iteratively rearrange rows and/or columns according to their
+#'  weighted rank in the data matrix until convergence.
 #'
-#'  The homogeneity conditions state that all the groups included in a
-#'  seriation must:
-#'  \enumerate{
-#'   \item{Be of comparable duration.}
-#'   \item{Belong to the same cultural tradition.}
-#'   \item{Come from the same local area.}
-#'  }
-#'
-#'  The mathematical assumptions state that the distribution of any historical
-#'  or temporal class:
-#'  \enumerate{
-#'   \item{Is continuous through time.}
-#'   \item{Exhibits the form of a unimodal curve.}
-#'  }
-#'  Theses assumptions create a distributional model and ordering is
-#'  accomplished by arranging the matrix so that the class distributions
-#'  approximate the required pattern. The resulting order is inferred
-#'  to be chronological.
-#'
-#'  The following seriation methods are available:
-#'  \describe{
-#'   \item{`seriate_average()`}{Correspondence analysis-based seriation
-#'   (average ranking). Correspondence analysis (CA) is an effective method for
-#'   the seriation of archaeological assemblages. The order of the rows and
-#'   columns is given by the coordinates along one dimension of the CA space,
-#'   assumed to account for temporal variation. The direction of temporal change
-#'   within the correspondence analysis space is arbitrary: additional
-#'   information is needed to determine the actual order in time.}
-#'   \item{`seriate_rank()`}{Reciprocal ranking seriation. These procedures
-#'   iteratively rearrange rows and/or columns according to their weighted rank
-#'   in the data matrix until convergence.
-#'   Note that this procedure could enter into an infinite loop.
-#'   If no convergence is reached before the maximum number of iterations, it
-#'   stops with a warning.}
-#'  }
-#' @section Correspondence Analysis:
-#'  `bootstrap()` allows to identify samples that are subject to
-#'  sampling error or samples that have underlying structural relationships
-#'  and might be influencing the ordering along the CA space.
-#'
-#'  This relies on a partial bootstrap approach to CA-based seriation where each
-#'  sample is replicated `n` times. The maximum dimension length of
-#'  the convex hull around the sample point cloud allows to remove samples for
-#'  a given `cutoff` value.
-#'
-#'  According to Peebles and Schachner (2012), "\[this\] point removal procedure
-#'  \[results in\] a reduced dataset where the position of individuals within the
-#'  CA are highly stable and which produces an ordering consistent with the
-#'  assumptions of frequency seriation."
+#'  Note that this procedure could enter into an infinite loop. If no
+#'  convergence is reached before the maximum number of iterations, it stops
+#'  with a warning.
 #' @return
-#'  * `seriate_*()` returns a [PermutationOrder-class] object.
-#'  * `permute()` returns either a permuted `matrix` or a permuted `data.frame`
-#'    (the same as `object`).
-#'  * `bootstrap()` returns a [RefineCA-class] object.
+#'  A [RankPermutationOrder-class] object.
 #' @references
 #'  Desachy, B. (2004). Le sériographe EPPM: un outil informatisé de sériation
 #'  graphique pour tableaux de comptages. *Revue archéologique de Picardie*,
@@ -747,29 +666,10 @@ NULL
 #'  In C. Weihs & W. Gaul (Eds.), *Classification: The Ubiquitous
 #'  Challenge*. Berlin Heidelberg: Springer, p. 307-316.
 #'  \doi{10.1007/3-540-28084-7_34}.
-#'
-#'  Peeples, M. A., & Schachner, G. (2012). Refining correspondence
-#'  analysis-based ceramic seriation of regional data sets. *Journal of
-#'  Archaeological Science*, 39(8), 2818-2827.
-#'  \doi{10.1016/j.jas.2012.04.040}.
-#' @seealso [dimensio::ca()]
 #' @example inst/examples/ex-seriation.R
 #' @author N. Frerebeau
 #' @family seriation methods
 #' @docType methods
-#' @name seriation
-#' @rdname seriation
-NULL
-
-#' @rdname seriation
-#' @aliases seriate_average-method
-setGeneric(
-  name = "seriate_average",
-  def = function(object, ...) standardGeneric("seriate_average"),
-  valueClass = "PermutationOrder"
-)
-
-#' @rdname seriation
 #' @aliases seriate_rank-method
 setGeneric(
   name = "seriate_rank",
@@ -777,15 +677,45 @@ setGeneric(
   valueClass = "PermutationOrder"
 )
 
-#' @rdname seriation
-#' @aliases refine-method
+## Average Ranking -------------------------------------------------------------
+#' Correspondence Analysis-Based Seriation
+#'
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
+#' @param margin A [`numeric`] vector giving the subscripts which the
+#'  rearrangement will be applied over: `1` indicates rows, `2` indicates
+#'  columns, `c(1, 2)` indicates rows then columns, `c(2, 1)` indicates columns
+#'  then rows.
+#' @param axes An [`integer`] vector giving the subscripts of the CA axes to be
+#'  used.
+#' @param ... Further arguments to be passed to internal methods.
+#' @details
+#'  Correspondence analysis (CA) is an effective method for the seriation of
+#'  archaeological assemblages. The order of the rows and columns is given by
+#'  the coordinates along one dimension of the CA space, assumed to account for
+#'  temporal variation. The direction of temporal change within the
+#'  correspondence analysis space is arbitrary: additional information is needed
+#'  to determine the actual order in time.
+#' @return
+#'  An [AveragePermutationOrder-class] object.
+#' @references
+#'  Ihm, P. (2005). A Contribution to the History of Seriation in Archaeology.
+#'  In C. Weihs & W. Gaul (Eds.), *Classification: The Ubiquitous
+#'  Challenge*. Berlin Heidelberg: Springer, p. 307-316.
+#'  \doi{10.1007/3-540-28084-7_34}.
+#' @seealso [dimensio::ca()]
+#' @example inst/examples/ex-seriation.R
+#' @author N. Frerebeau
+#' @family seriation methods
+#' @docType methods
+#' @aliases seriate_average-method
 setGeneric(
-  name = "refine",
-  def = function(object, ...) standardGeneric("refine"),
-  valueClass = "RefineCA"
+  name = "seriate_average",
+  def = function(object, ...) standardGeneric("seriate_average"),
+  valueClass = "PermutationOrder"
 )
 
-# @rdname seriation
+# @rdname seriate_constrain
 # @aliases seriate_constrain-method
 # setGeneric(
 #   name = "seriate_constrain",
@@ -793,7 +723,7 @@ setGeneric(
 #   valueClass = "PermutationOrder"
 # )
 
-# @rdname seriation
+# @rdname seriate_idds
 # @aliases seriate_idds-method
 # setGeneric(
 #   name = "seriate_idds",
@@ -801,16 +731,91 @@ setGeneric(
 #   valueClass = "PermutationOrder"
 # )
 
-#' @rdname seriation
+## Refine ----------------------------------------------------------------------
+#' Refine CA-based Seriation
+#'
+#' @param object A [PermutationOrder-class] object (typically returned by
+#'  [seriate_average()]).
+#' @param cutoff A function that takes a numeric vector as argument and returns
+#'  a single numeric value (see below).
+#' @param n A non-negative [`integer`] giving the number of bootstrap
+#'  replications.
+#' @param margin A length-one [`numeric`] vector giving the subscripts which the
+#'  refinement will be applied over: `1` indicates rows, `2` indicates columns.
+#' @param axes An [`integer`] vector giving the subscripts of the CA axes to be
+#'  used.
+#' @param ... Further arguments to be passed to internal methods.
+#' @details
+#'  `seriate_refine()` allows to identify samples that are subject to
+#'  sampling error or samples that have underlying structural relationships
+#'  and might be influencing the ordering along the CA space.
+#'
+#'  This relies on a partial bootstrap approach to CA-based seriation where each
+#'  sample is replicated `n` times. The maximum dimension length of
+#'  the convex hull around the sample point cloud allows to remove samples for
+#'  a given `cutoff` value.
+#'
+#'  According to Peebles and Schachner (2012), "\[this\] point removal procedure
+#'  \[results in\] a reduced dataset where the position of individuals within
+#'  the CA are highly stable and which produces an ordering consistent with the
+#'  assumptions of frequency seriation."
+#' @return
+#'  A [RefinePermutationOrder-class] object.
+#' @references
+#'  Peeples, M. A., & Schachner, G. (2012). Refining correspondence
+#'  analysis-based ceramic seriation of regional data sets. *Journal of
+#'  Archaeological Science*, 39(8), 2818-2827.
+#'  \doi{10.1016/j.jas.2012.04.040}.
+#' @author N. Frerebeau
+#' @docType methods
+#' @family seriation methods
+#' @aliases seriate_refine-method
+setGeneric(
+  name = "seriate_refine",
+  def = function(object, ...) standardGeneric("seriate_refine")
+)
+
+## Permute ---------------------------------------------------------------------
+#' Rearranges a Data Matrix
+#'
+#' @description
+#'  * `permute()` rearranges a data matrix according to a permutation order.
+#'  * `get_order()` returns the seriation order for rows and columns.
+#' @param object An \eqn{m \times p}{m x p} `numeric` [`matrix`] or a
+#'  [`data.frame`] of count data (absolute frequencies).
+#' @param x,order A [PermutationOrder-class] object giving the permutation
+#'  order for rows and columns.
+#' @param margin A [`numeric`] vector giving the subscripts which the
+#'  rearrangement will be applied over: `1` indicates rows, `2` indicates
+#'  columns, `c(1, 2)` indicates rows and columns.
+#' @param ... Currently not used.
+#' @return
+#'  A permuted `matrix` or a permuted `data.frame` (the same as `object`).
+#' @seealso [dimensio::ca()]
+#' @example inst/examples/ex-seriation.R
+#' @author N. Frerebeau
+#' @family seriation methods
+#' @docType methods
 #' @aliases permute-method
 setGeneric(
   name = "permute",
   def = function(object, order, ...) standardGeneric("permute")
 )
 
-#' @rdname seriation
+#' @rdname permute
 #' @aliases get_order-method
 setGeneric(
   name = "get_order",
   def = function(x, ...) standardGeneric("get_order")
 )
+
+# Deprecated ===================================================================
+#' Deprecated Methods
+#'
+#' @inheritParams seriate_refine
+#' @author N. Frerebeau
+#' @docType methods
+#' @name deprecate
+#' @rdname deprecate
+#' @keywords internal
+NULL

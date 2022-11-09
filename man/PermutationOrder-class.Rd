@@ -24,11 +24,11 @@ An S4 class to represent a permutation order.
 }
 \section{Functions}{
 \itemize{
-\item \code{[[,PermutationOrder,ANY,missing-method}: Extracts information from a slot selected
+\item \code{x[[i}: Extracts information from a slot selected
 by subscript i. i is a length-one character vector. Returns the
 corresponding slot values.
-}}
 
+}}
 \section{Slots}{
 
 \describe{
@@ -49,7 +49,7 @@ Other classes:
 \code{\link{IncrementTest-class}},
 \code{\link{MeanDate-class}},
 \code{\link{RateOfChange-class}},
-\code{\link{RefineCA-class}}
+\code{\link{RefinePermutationOrder-class}}
 }
 \author{
 N. Frerebeau

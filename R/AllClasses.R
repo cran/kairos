@@ -51,11 +51,12 @@ NULL
 #'
 #' S4 classes to store the event and accumulation times of archaeological
 #' assemblages.
-#' @slot dates A [`numeric`] vector of dates.
+#' @slot contexts A \eqn{m \times p}{m x p} [`integer`] [`matrix`] of count
+#'  data.
+#' @slot dates A length-\eqn{m} [`numeric`] vector of dates.
 #' @slot model A [multiple linear model][stats::lm()]: the Gaussian
 #'  multiple linear regression model fitted for event date estimation and
 #'  prediction.
-#' @slot cutoff An length-one [`integer`] vector giving the cutoff value.
 #' @slot keep An [`integer`] vector.
 #' @seealso [`dimensio::CA-class`]
 #' @author N. Frerebeau
@@ -65,9 +66,9 @@ NULL
 .EventDate <- setClass(
   Class = "EventDate",
   slots = c(
+    contexts = "matrix",
     dates = "numeric",
     model = "lm",
-    cutoff = "integer",
     keep = "integer"
   ),
   contains = "CA"
@@ -240,25 +241,21 @@ NULL
 #'  to link each row to a variable.
 #' @slot length A [`numeric`] vector giving the convex hull maximum
 #'  dimension length.
-#' @slot keep An [`integer`] vector giving the subscript of the variables
-#'  to be kept.
 #' @slot cutoff A length-one [`numeric`] vector giving the cutoff value for
 #'  samples selection.
-#' @param x An object from which to extract element(s) or in which to replace
-#'  element(s).
-#' @param i A [`character`] string specifying elements to extract.
-#' @seealso [`dimensio::CA-class`]
+#' @slot keep An [`integer`] vector giving the subscript of the variables
+#'  to be kept.
 #' @author N. Frerebeau
 #' @family classes
 #' @docType class
 #' @aliases RefineCA-class
-.RefineCA <- setClass(
-  Class = "RefineCA",
+.RefinePermutationOrder <- setClass(
+  Class = "RefinePermutationOrder",
   slots = c(
-    hull = "matrix",
     length = "numeric",
-    keep = "integer",
     cutoff = "numeric",
+    keep = "integer",
     margin = "integer"
-  )
+  ),
+  contains = "AveragePermutationOrder"
 )

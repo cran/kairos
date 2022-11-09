@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="N. Frerebeau" />
+
+<meta name="date" content="2022-11-08" />
+
+<title>Event Date Model</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Event Date Model</h1>
+<h4 class="author">N. Frerebeau</h4>
+<h4 class="date">2022-11-08</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#definition" id="toc-definition">Definition</a>
+<ul>
+<li><a href="#event-date" id="toc-event-date">Event Date</a></li>
+<li><a href="#accumulation-date" id="toc-accumulation-date">Accumulation
+Date</a></li>
+</ul></li>
+<li><a href="#limitation" id="toc-limitation">Limitation</a></li>
+<li><a href="#usage" id="toc-usage">Usage</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(folio) <span class="co"># Datasets</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kairos)</span></code></pre></div>
+<div id="definition" class="section level2">
+<h2>Definition</h2>
+<p>Event and accumulation dates are density estimates of the occupation
+and duration of an archaeological site <span class="citation">(L.
+Bellanger, Husi, and Tomassone 2006; L. Bellanger, Tomassone, and Husi
+2008; Lise Bellanger and Husi 2012)</span>.</p>
+<p>The event date is an estimation of the <em>terminus post-quem</em> of
+an archaeological assemblage. The accumulation date represents the
+“chronological profile” of the assemblage. According to <span class="citation">Lise Bellanger and Husi (2012)</span>, accumulation
+date can be interpreted “at best […] as a formation process reflecting
+the duration or succession of events on the scale of archaeological
+time, and at worst, as imprecise dating due to contamination of the
+context by residual or intrusive material.” In other words, accumulation
+dates estimate occurrence of archaeological events and rhythms of the
+long term.</p>
+<div id="event-date" class="section level3">
+<h3>Event Date</h3>
+<p>Event dates are estimated by fitting a Gaussian multiple linear
+regression model on the factors resulting from a correspondence analysis
+- somewhat similar to the idea introduced by <span class="citation">Poblome and Groenen (2003)</span>. This model results
+from the known dates of a selection of reliable contexts and allows to
+predict the event dates of the remaining assemblages.</p>
+<p>First, a correspondence analysis (CA) is carried out to summarize the
+information in the count matrix <span class="math inline">\(X\)</span>.
+The correspondence analysis of <span class="math inline">\(X\)</span>
+provides the coordinates of the <span class="math inline">\(m\)</span>
+rows along the <span class="math inline">\(q\)</span> factorial
+components, denoted <span class="math inline">\(f_{ik} ~\forall i \in
+\left[ 1,m \right], k \in \left[ 1,q \right]\)</span>.</p>
+<p>Then, assuming that <span class="math inline">\(n\)</span>
+assemblages are reliably dated by another source, a Gaussian multiple
+linear regression model is fitted on the factorial components for the
+<span class="math inline">\(n\)</span> dated assemblages:</p>
+<p><span class="math display">\[
+t^E_i = \beta_{0} + \sum_{k = 1}^{q} \beta_{k} f_{ik} + \epsilon_i
+~\forall i \in [1,n]
+\]</span> where <span class="math inline">\(t^E_i\)</span> is the known
+date point estimate of the <span class="math inline">\(i\)</span>th
+assemblage, <span class="math inline">\(\beta_k\)</span> are the
+regression coefficients and <span class="math inline">\(\epsilon_i\)</span> are normally, identically and
+independently distributed random variables, <span class="math inline">\(\epsilon_i \sim
+\mathcal{N}(0,\sigma^2)\)</span>.</p>
+<p>These <span class="math inline">\(n\)</span> equations are stacked
+together and written in matrix notation as</p>
+<p><span class="math display">\[
+t^E = F \beta + \epsilon
+\]</span></p>
+<p>where <span class="math inline">\(\epsilon \sim
+\mathcal{N}_{n}(0,\sigma^2 I_{n})\)</span>, <span class="math inline">\(\beta = \left[ \beta_0 \cdots \beta_q \right]&#39;
+\in \mathbb{R}^{q+1}\)</span> and</p>
+<p><span class="math display">\[
+F =
+\begin{bmatrix}
+1 &amp; f_{11} &amp; \cdots &amp; f_{1q} \\
+1 &amp; f_{21} &amp; \cdots &amp; f_{2q} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+1 &amp; f_{n1} &amp; \cdots &amp; f_{nq}
+\end{bmatrix}
+\]</span></p>
+<p>Assuming that <span class="math inline">\(F&#39;F\)</span> is
+nonsingular, the ordinary least squares estimator of the unknown
+parameter vector <span class="math inline">\(\beta\)</span> is:</p>
+<p><span class="math display">\[
+\widehat{\beta} = \left( F&#39;F \right)^{-1} F&#39; t^E
+\]</span></p>
+<p>Finally, for a given vector of CA coordinates <span class="math inline">\(f_i\)</span>, the predicted event date of an
+assemblage <span class="math inline">\(t^E_i\)</span> is:</p>
+<p><span class="math display">\[
+\widehat{t^E_i} = f_i \hat{\beta}
+\]</span></p>
+<p>The endpoints of the <span class="math inline">\(100(1 −
+\alpha)\)</span>% associated prediction confidence interval are given
+as:</p>
+<p><span class="math display">\[
+\widehat{t^E_i} \pm t_{\alpha/2,n-q-1} \sqrt{\widehat{V}}
+\]</span></p>
+<p>where <span class="math inline">\(\widehat{V_i}\)</span> is an
+estimator of the variance of the prediction error:
+<!-- https://stats.stackexchange.com/questions/147242/how-to-calculate-the-prediction-interval-for-an-ols-multiple-regression -->
+<span class="math display">\[
+\widehat{V_i} = \widehat{\sigma}^2 \left( f_i^T \left( F&#39;F
+\right)^{-1} f_i + 1 \right)
+\]</span></p>
+<p>were <span class="math inline">\(\widehat{\sigma} =
+\frac{\sum_{i=1}^{n} \left( t_i - \widehat{t^E_i} \right)^2}{n - q -
+1}\)</span>.</p>
+<p>The probability density of an event date <span class="math inline">\(t^E_i\)</span> can be described as a normal
+distribution:</p>
+<p><span class="math display">\[
+t^E_i \sim \mathcal{N}(\widehat{t^E_i},\widehat{V_i})
+\]</span></p>
+</div>
+<div id="accumulation-date" class="section level3">
+<h3>Accumulation Date</h3>
+<p>As row (assemblages) and columns (types) CA coordinates are linked
+together through the so-called transition formulae, event dates for each
+type <span class="math inline">\(t^E_j\)</span> can be predicted
+following the same procedure as above.</p>
+<p>Then, the accumulation date <span class="math inline">\(t^A_i\)</span> is defined as the weighted mean of
+the event date of the ceramic types found in a given assemblage. The
+weights are the conditional frequencies of the respective types in the
+assemblage (akin to the MCD).</p>
+<p>The accumulation date is estimated as: <span class="math display">\[
+\widehat{t^A_i} = \sum_{j = 1}^{p} \widehat{t^E_j} \times
+\frac{x_{ij}}{x_{i \cdot}}
+\]</span></p>
+<p>The probability density of an accumulation date <span class="math inline">\(t^A_i\)</span> can be described as a Gaussian
+mixture:</p>
+<p><span class="math display">\[
+t^A_i \sim \frac{x_{ij}}{x_{i \cdot}}
+\mathcal{N}(\widehat{t^E_j},\widehat{V_j}^2)
+\]</span></p>
+<p>Interestingly, the integral of the accumulation date offers an
+estimates of the cumulative occurrence of archaeological events, which
+is close enough to the definition of the <em>tempo plot</em> introduced
+by <span class="citation">Dye (2016)</span>.</p>
+</div>
+</div>
+<div id="limitation" class="section level2">
+<h2>Limitation</h2>
+<p>Event and accumulation dates estimation relies on the same conditions
+and assumptions as the matrix seriation problem. <span class="citation">Dunnell (1970)</span> summarizes these conditions and
+assumptions as follows.</p>
+<p>The homogeneity conditions state that all the groups included in a
+seriation must:</p>
+<ul>
+<li>Be of comparable duration.</li>
+<li>Belong to the same cultural tradition.</li>
+<li>Come from the same local area.</li>
+</ul>
+<p>The mathematical assumptions state that the distribution of any
+historical or temporal class:</p>
+<ul>
+<li>Is continuous through time.</li>
+<li>Exhibits the form of a unimodal curve.</li>
+</ul>
+<p>Theses assumptions create a distributional model and ordering is
+accomplished by arranging the matrix so that the class distributions
+approximate the required pattern. The resulting order is inferred to be
+chronological.</p>
+<p>Predicted dates have to be interpreted with care: these dates are
+highly dependent on the range of the known dates and the fit of the
+regression.</p>
+</div>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+<p>This package provides an implementation of the chronological modeling
+method developed by <span class="citation">Lise Bellanger and Husi
+(2012)</span>. This method is slightly modified here and allows the
+construction of different probability density curves of archaeological
+assemblage dates (<em>event</em>, <em>activity</em> and
+<em>tempo</em>).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Bellanger et al. did not publish the data supporting their demonstration: </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="do">## no replication of their results is possible. </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Here is a pseudo-reproduction using the zuni dataset</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Assume that some assemblages are reliably dated (this is NOT a real example)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="do">## The names of the vector entries must match the names of the assemblages</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>zuni_dates <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0569 =</span> <span class="dv">1097</span>, <span class="at">LZ0279 =</span> <span class="dv">1119</span>, <span class="at">CS16 =</span> <span class="dv">1328</span>, <span class="at">LZ0066 =</span> <span class="dv">1111</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0852 =</span> <span class="dv">1216</span>, <span class="at">LZ1209 =</span> <span class="dv">1251</span>, <span class="at">CS144 =</span> <span class="dv">1262</span>, <span class="at">LZ0563 =</span> <span class="dv">1206</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0329 =</span> <span class="dv">1076</span>, <span class="at">LZ0005Q =</span> <span class="dv">859</span>, <span class="at">LZ0322 =</span> <span class="dv">1109</span>, <span class="at">LZ0067 =</span> <span class="dv">863</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">LZ0578 =</span> <span class="dv">1180</span>, <span class="at">LZ0227 =</span> <span class="dv">1104</span>, <span class="at">LZ0610 =</span> <span class="dv">1074</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Model the event and accumulation date for each assemblage</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">event</span>(zuni, <span class="at">dates =</span> zuni_dates, <span class="at">cutoff =</span> <span class="dv">90</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: Argument &#39;cutoff&#39; is defunct; please use &#39;rank&#39; instead.</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">get_model</span>(model))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; stats::lm(formula = date ~ ., data = data)</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  LZ0569  LZ0279    CS16  LZ0066  LZ0852  LZ1209   CS144  LZ0563  LZ0329 LZ0005Q </span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  0.4466 -3.9079 -0.2887  0.7279 -1.3127  0.5037  2.7819 -4.4530 -0.7960  0.1254 </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  LZ0322  LZ0067  LZ0578  LZ0227  LZ0610 </span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2.6011 -0.1375  3.5140 -0.7672  0.9624 </span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Intercept) 1164.6501     2.9154 399.481 2.36e-10 ***</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F1          -158.2879     1.6497 -95.948 7.07e-08 ***</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F2            25.7034     1.6841  15.263 0.000107 ***</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F3            -5.6058     2.1603  -2.595 0.060368 .  </span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F4            10.7571     5.8231   1.847 0.138419    </span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F5            -3.1388     3.9485  -0.795 0.471160    </span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F6             2.7244     1.3288   2.050 0.109653    </span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F7             4.5647     5.2198   0.874 0.431212    </span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F8            11.2980     3.4629   3.263 0.031006 *  </span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F9            -5.1715     2.9554  -1.750 0.155041    </span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F10           -0.3957     2.6497  -0.149 0.888522    </span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ---</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Residual standard error: 4.09 on 4 degrees of freedom</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Multiple R-squared:  0.9997, Adjusted R-squared:  0.999 </span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; F-statistic:  1433 on 10 and 4 DF,  p-value: 1.167e-06</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate event dates</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>event <span class="ot">&lt;-</span> <span class="fu">predict_event</span>(model, <span class="at">margin =</span> <span class="dv">1</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(event)</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        date lower upper error</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 1169  1152  1185     6</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1103 1143  1136  1150     2</span></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1100 1156  1141  1172     5</span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1099 1099  1087  1111     4</span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1097 1088  1078  1099     4</span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1096  840   825   855     5</span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate accumulation dates</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">predict_accumulation</span>(model)</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(acc)</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 LZ1103 LZ1100 LZ1099 LZ1097 LZ1096 </span></span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1170   1140   1158   1087   1092    875</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Activity plot</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="at">type =</span> <span class="st">&quot;activity&quot;</span>, <span class="at">event =</span> <span class="cn">TRUE</span>, <span class="at">select =</span> <span class="st">&quot;LZ1105&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Tempo plot</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(model, <span class="at">type =</span> <span class="st">&quot;tempo&quot;</span>, <span class="at">select =</span> <span class="st">&quot;LZ1105&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>Resampling methods can be used to check the stability of the
+resulting model. If <code>jackknife()</code> is used, one type/fabric is
+removed at a time and all statistics are recalculated. In this way, one
+can assess whether certain type/fabric has a substantial influence on
+the date estimate. If <code>bootstrap()</code> is used, a large number
+of new bootstrap assemblages is created, with the same sample size, by
+resampling the original assemblage with replacement. Then, examination
+of the bootstrap statistics makes it possible to pinpoint assemblages
+that require further investigation.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Check model variability</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: this may take a few seconds</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Jackknife fabrics</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>jack <span class="ot">&lt;-</span> <span class="fu">jackknife</span>(model)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(jack)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        date lower upper error bias</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 1169  1153  1186     6    0</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1103 1143  1137  1150     2    0</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1100 1158  1142  1173     5   34</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1099 1097  1085  1109     4  -34</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1097 1094  1083  1104     4  102</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1096  842   827   857     5   34</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Bootstrap of assemblages</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">bootstrap</span>(model, <span class="at">n =</span> <span class="dv">30</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(boot)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         min     mean  max      Q5     Q95</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1105 1131 1171.333 1215 1134.35 1200.40</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1103 1081 1144.667 1198 1101.35 1186.60</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1100 1129 1167.833 1226 1141.50 1213.15</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1099 1088 1099.000 1112 1089.45 1106.00</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1097  971 1095.633 1254 1005.00 1198.15</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; LZ1096  726  844.600 1124  726.00  993.05</span></span></code></pre></div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bellanger2006" class="csl-entry">
+Bellanger, L., Ph. Husi, and R. Tomassone. 2006. <span>“<span>Une
+approche statistique pour la datation de contextes
+archéologiques</span>.”</span> <em>Revue de statistique appliquée</em>
+54 (2): 65–81. <a href="https://doi.org/10.1111/j.1475-4754.2006.00249.x">https://doi.org/10.1111/j.1475-4754.2006.00249.x</a>.
+</div>
+<div id="ref-bellanger2012" class="csl-entry">
+Bellanger, Lise, and Philippe Husi. 2012. <span>“Statistical
+<span>Tool</span> for <span>Dating</span> and <span>Interpreting
+Archaeological Contexts Using Pottery</span>.”</span> <em>Journal of
+Archaeological Science</em> 39 (4): 777–90. <a href="https://doi.org/10.1016/j.jas.2011.06.031">https://doi.org/10.1016/j.jas.2011.06.031</a>.
+</div>
+<div id="ref-bellanger2008" class="csl-entry">
+Bellanger, L., R. Tomassone, and P. Husi. 2008. <span>“A
+<span>Statistical Approach</span> for <span>Dating Archaeological
+Contexts</span>.”</span> <em>Journal of Data Science</em> 6: 135–54.
+</div>
+<div id="ref-dunnell1970" class="csl-entry">
+Dunnell, Robert C. 1970. <span>“Seriation <span>Method</span> and
+<span>Its Evaluation</span>.”</span> <em>American Antiquity</em> 35
+(03): 305–19. <a href="https://doi.org/10.2307/278341">https://doi.org/10.2307/278341</a>.
+</div>
+<div id="ref-dye2016" class="csl-entry">
+Dye, Thomas S. 2016. <span>“Long-<span>Term Rhythms</span> in the
+<span>Development</span> of <span>Hawaiian Social
+Stratification</span>.”</span> <em>Journal of Archaeological
+Science</em> 71 (July): 1–9. <a href="https://doi.org/10.1016/j.jas.2016.05.006">https://doi.org/10.1016/j.jas.2016.05.006</a>.
+</div>
+<div id="ref-poblome2003" class="csl-entry">
+Poblome, J., and P. J. F. Groenen. 2003. <span>“Constrained
+<span>Correspondence Analysis</span> for <span>Seriation</span> of
+<span>Sagalassos Tablewares</span>.”</span> In <em>The <span>Digital
+Heritage</span> of <span>Archaeology</span></em>, edited by M. Doerr and
+A. Sarris. <span>Hellenic Ministry of Culture</span>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

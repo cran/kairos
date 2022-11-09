@@ -2,7 +2,7 @@
 NULL
 
 #' @export
-#' @rdname seriation
+#' @rdname seriate_average
 #' @aliases seriate_average,data.frame-method
 setMethod(
   f = "seriate_average",
@@ -14,30 +14,38 @@ setMethod(
 )
 
 #' @export
-#' @rdname seriation
+#' @rdname seriate_average
 #' @aliases seriate_average,matrix-method
 setMethod(
   f = "seriate_average",
   signature = signature(object = "matrix"),
   definition = function(object, margin = c(1, 2), axes = 1, ...) {
-    # Validation
-    margin <- as.integer(margin)
-    axes <- as.integer(axes)[[1L]]
+    ## Validation
+    arkhe::assert_length(axes, 1)
 
-    # Original sequences
+    margin <- as.integer(margin)
+    axes <- as.integer(axes)
+
+    ## Original sequences
     i <- seq_len(nrow(object))
     j <- seq_len(ncol(object))
-    # Correspondence analysis
+
+    ## Correspondence analysis
     corresp <- dimensio::ca(object, ...)
-    # Sequence of the first axis as best seriation order
     coords <- list(
       rows = dimensio::get_coordinates(corresp, margin = 1),
       columns = dimensio::get_coordinates(corresp, margin = 2)
     )
+
+    ## Reorder in case if supplementary observations
+    coords$rows <- coords$rows[order(corresp@rows@order), ]
+    coords$columns <- coords$columns[order(corresp@columns@order), ]
+
+    ## Seriation order
     row_coords <- if (1 %in% margin) order(coords$rows[, axes]) else i
     col_coords <- if (2 %in% margin) order(coords$columns[, axes]) else j
 
-    # New PermutationOrder object
+    ## New PermutationOrder object
     .AveragePermutationOrder(
       corresp,
       rows_order = as.integer(row_coords),

@@ -8,6 +8,7 @@
 [![R-CMD-check](https://github.com/tesselle/kairos/workflows/R-CMD-check/badge.svg)](https://github.com/tesselle/kairos/actions)
 [![codecov](https://codecov.io/gh/tesselle/kairos/branch/master/graph/badge.svg)](https://app.codecov.io/gh/tesselle/kairos)
 [![CodeFactor](https://www.codefactor.io/repository/github/tesselle/kairos/badge)](https://www.codefactor.io/repository/github/tesselle/kairos)
+[![Dependencies](https://tinyverse.netlify.com/badge/kairos)](https://cran.r-project.org/package=kairos)
 
 <a href="https://tesselle.r-universe.dev" class="pkgdown-devel"><img
 src="https://tesselle.r-universe.dev/badges/kairos"
@@ -18,7 +19,7 @@ src="http://www.r-pkg.org/badges/version/kairos"
 alt="CRAN Version" /></a> <a
 href="https://cran.r-project.org/web/checks/check_results_kairos.html"
 class="pkgdown-release"><img
-src="https://cranchecks.info/badges/worst/kairos"
+src="https://badges.cranchecks.info/worst/kairos.svg"
 alt="CRAN checks" /></a>
 <a href="https://cran.r-project.org/package=kairos"
 class="pkgdown-release"><img
@@ -72,7 +73,8 @@ remotes::install_github("tesselle/kairos")
 
 ``` r
 ## Load packages
-library(tabula)
+library(khroma) # Colour schemes
+library(tabula) # Plot methods
 library(kairos)
 ```
 
@@ -93,11 +95,7 @@ incidence1 <- matrix(sample(0:1, 400, TRUE, c(0.6, 0.4)), nrow = 20)
 incidence1 <- incidence1 > 0 # logical
 
 ## Get seriation order on rows and columns
-## If no convergence is reached before the maximum number of iterations (100), 
-## it stops with a warning.
 (indices <- seriate_rank(incidence1, margin = c(1, 2), stop = 100))
-#> Plus d’une classe "PermutationOrder" est trouvée en cache : Utilisation de la première, depuis l’espace de noms 'tabula'
-#> Aussi défini par 'kairos'
 #> <RankPermutationOrder>
 #> Permutation order for matrix seriation:
 #> - Row order: 1 4 20 3 9 16 19 10 13 2 11 7 17 5 6 18 14 15 8 12...
@@ -108,12 +106,37 @@ incidence2 <- permute(incidence1, indices)
 
 ## Plot matrix
 tabula::plot_heatmap(incidence1) +
-  ggplot2::scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "black"))
+  khroma::scale_fill_logical()
 tabula::plot_heatmap(incidence2) +
-  ggplot2::scale_fill_manual(values = c("FALSE" = "white", "TRUE" = "black"))
+  khroma::scale_fill_logical()
 ```
 
 <img src="man/figures/README-seriation-1.png" width="50%" /><img src="man/figures/README-seriation-2.png" width="50%" />
+
+``` r
+## Aoristic Analysis
+data("loire", package = "folio")
+loire <- subset(loire, area %in% c("Anjou", "Blésois", "Orléanais", "Haut-Poitou", "Touraine"))
+
+## Get time range
+loire_range <- loire[, c("lower", "upper")]
+
+## Calculate aoristic sum (weights) by group
+aorist_groups <- aoristic(loire_range, step = 50, weight = TRUE,
+                          groups = loire$area)
+plot(aorist_groups)
+```
+
+![](man/figures/README-aoristic-1.png)<!-- -->
+
+``` r
+
+## Rate of change by group
+roc_groups <- roc(aorist_groups, n = 30)
+plot(roc_groups)
+```
+
+![](man/figures/README-aoristic-2.png)<!-- -->
 
 ## Contributing
 
