@@ -6,23 +6,42 @@
 \alias{.EventDate}
 \title{Date Model}
 \description{
-S4 classes to store the event and accumulation times of archaeological
+An S4 class to store the event and accumulation times of archaeological
 assemblages.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{contexts}}{A \eqn{m \times p}{m x p} \code{\link{integer}} \code{\link{matrix}} of count
+\item{\code{contexts}}{A \eqn{m \times p}{m x p} \code{integer} \code{\link{matrix}} of count
 data.}
 
-\item{\code{dates}}{A length-\eqn{m} \code{\link{numeric}} vector of dates.}
+\item{\code{dates}}{A length-\eqn{m} \code{\link{numeric}} vector of dates expressed in
+\emph{\link[aion:RataDie-class]{rata die}}.}
 
 \item{\code{model}}{A \link[stats:lm]{multiple linear model}: the Gaussian
 multiple linear regression model fitted for event date estimation and
 prediction.}
 
-\item{\code{keep}}{An \code{\link{integer}} vector.}
+\item{\code{keep}}{An \code{\link{integer}} vector giving the subscripts of the CA components
+to keep.}
 }}
+
+\note{
+Dates are internally stored as \emph{\link[aion:RataDie-class]{rata die}}.
+This class inherits from \code{\link[dimensio:CA-class]{dimensio::CA}}.
+}
+\section{Extract}{
+
+In the code snippets below, \code{x} is an \code{EventDate} object.
+\describe{
+\item{\code{\link[=time]{time(x)}}}{Extract dates of assemblages.}
+\item{\code{\link[=coef]{coef(x)}}}{Extract model coefficients.}
+\item{\code{\link[=fitted]{fitted(x)}}}{Extract model fitted values.}
+\item{\code{\link[=residuals]{residuals(x)}}}{Extract model residuals.}
+\item{\code{\link[=sigma]{sigma(x)}}}{Extract the residual standard deviation.}
+\item{\code{\link[=terms]{terms(x)}}}{Extract model terms.}
+}
+}
 
 \seealso{
 \code{\link[dimensio:CA-class]{dimensio::CA}}
@@ -40,3 +59,4 @@ Other classes:
 N. Frerebeau
 }
 \concept{classes}
+\keyword{internal}

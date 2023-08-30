@@ -4,49 +4,26 @@ NULL
 
 # Getters ======================================================================
 #' @export
-#' @rdname mutators
-#' @aliases get_dates,AoristicSum-method
-setMethod("get_dates", "AoristicSum", function(x) {
-  breaks <- x@breaks
-  data.frame(
-    start = utils::head(breaks, -1),
-    end = utils::tail(breaks, -1)
-  )
-})
-
-#' @export
-#' @rdname mutators
+#' @rdname series
 #' @aliases get_dates,EventDate-method
-setMethod("get_dates", "EventDate", function(x) x@dates)
+setMethod(
+  f = "time",
+  signature = "EventDate",
+  definition = function(x, calendar = NULL) {
+    z <- x@dates
+    if (is.null(calendar)) return(z)
+    aion::as_year(z, calendar = calendar, decimal = TRUE)
+  }
+)
 
 #' @export
 #' @rdname mutators
-#' @aliases get_dates,RateOfChange-method
-setMethod("get_dates", "RateOfChange", function(x) x@breaks)
+#' @aliases weights,AoristicSum-method
+setMethod("weights", "AoristicSum", function(object, ...) object@weights)
 
 #' @export
 #' @rdname mutators
-#' @aliases get_groups,AoristicSum-method
-setMethod("get_groups", "AoristicSum", function(x) x@groups)
-
-#' @export
-#' @rdname mutators
-#' @aliases get_model,EventDate-method
-setMethod("get_model", "EventDate", function(x) x@model)
-
-#' @export
-#' @rdname mutators
-#' @aliases get_weights,AoristicSum-method
-setMethod("get_weights", "AoristicSum", function(x) x@p)
-
-#' @export
-#' @rdname mutators
-#' @aliases get_weights,CountApportion-method
-setMethod("get_weights", "CountApportion", function(x) x@p)
-
-#' @export
-#' @rdname mutators
-#' @aliases get_weights,MeanDate-method
-setMethod("get_weights", "MeanDate", function(x) x@weights)
+#' @aliases weights,CountApportion-method
+setMethod("weights", "CountApportion", function(object, ...) object@p)
 
 # Setters ======================================================================

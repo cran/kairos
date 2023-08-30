@@ -19,7 +19,7 @@
 )
 }
 \arguments{
-\item{object}{An \linkS4class{EventDate} object (typically returned by \code{\link[=event]{event()}}).}
+\item{object}{An \code{\linkS4class{EventDate}} object (typically returned by \code{\link[=event]{event()}}).}
 
 \item{level}{A length-one \code{\link{numeric}} vector giving the confidence level.}
 
@@ -74,6 +74,8 @@ with the following columns:
 }
 }
 \seealso{
+\code{\link[=event]{event()}}
+
 Other resampling methods: 
 \code{\link{resample_mcd}}
 }

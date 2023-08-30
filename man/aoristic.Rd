@@ -14,29 +14,42 @@ aoristic(x, y, ...)
   x,
   y,
   step = 1,
-  start = min(x, na.rm = TRUE),
-  stop = max(y, na.rm = TRUE),
+  start = min(x),
+  end = max(y),
+  calendar = CE(),
   weight = TRUE,
   groups = NULL
 )
 
-\S4method{aoristic}{ANY,missing}(x, step = 1, start = NULL, stop = NULL, weight = TRUE, groups = NULL)
+\S4method{aoristic}{ANY,missing}(
+  x,
+  step = 1,
+  start = NULL,
+  end = NULL,
+  calendar = CE(),
+  weight = TRUE,
+  groups = NULL
+)
 }
 \arguments{
-\item{x, y}{A \code{\link{numeric}} vector. If \code{y} is missing, an attempt is made to
+\item{x, y}{A \code{\link{numeric}} vector giving the lower and upper boundaries of the
+time intervals, respectively. If \code{y} is missing, an attempt is made to
 interpret \code{x} in a suitable way (see \code{\link[grDevices:xy.coords]{grDevices::xy.coords()}}).}
 
 \item{...}{Currently not used.}
 
 \item{step}{A length-one \code{\link{integer}} vector giving the step size, i.e. the
-width of each time step in the time series (in years CE; defaults to
-\eqn{1} - i.e. annual level).}
+width of each time step in the time series (defaults to \eqn{1},
+i.e. annual level).}
 
 \item{start}{A length-one \code{\link{numeric}} vector giving the beginning of the time
-window (in years CE).}
+window.}
 
-\item{stop}{A length-one \code{\link{numeric}} vector giving the end of the time
-window (in years CE).}
+\item{end}{A length-one \code{\link{numeric}} vector giving the end of the time
+window.}
+
+\item{calendar}{A \code{\linkS4class{TimeScale}} object specifying the calendar of
+\code{x} and \code{y} (see \code{\link[=calendar]{calendar()}}). Defaults to Gregorian Common Era.}
 
 \item{weight}{A \code{\link{logical}} scalar: should the aoristic sum be weighted by
 the length of periods (default). If \code{FALSE} the aoristic sum is the number
@@ -48,7 +61,7 @@ be a length-one vector giving the index of the grouping component (column)
 of \code{x}.}
 }
 \value{
-An \linkS4class{AoristicSum} object.
+An \code{\linkS4class{AoristicSum}} object.
 }
 \description{
 Computes the aoristic sum.
@@ -67,7 +80,7 @@ problem. This method is not implemented here (for the moment), see the
 \href{https://github.com/ISAAKiel/aoristAAR}{\pkg{aoristAAR} package}.
 }
 \examples{
-## Aoristic Analysis
+## Data from Husi 2022
 data("loire", package = "folio")
 
 ## Get time range
@@ -75,16 +88,17 @@ loire_range <- loire[, c("lower", "upper")]
 
 ## Calculate aoristic sum (normal)
 aorist_raw <- aoristic(loire_range, step = 50, weight = FALSE)
-plot(aorist_raw)
+plot(aorist_raw, col = "grey")
 
 ## Calculate aoristic sum (weights)
 aorist_weighted <- aoristic(loire_range, step = 50, weight = TRUE)
-plot(aorist_weighted)
+plot(aorist_weighted, col = "grey")
 
 ## Calculate aoristic sum (weights) by group
 aorist_groups <- aoristic(loire_range, step = 50, weight = TRUE,
                           groups = loire$area)
-plot(aorist_groups)
+plot(aorist_groups, flip = TRUE, col = "grey")
+image(aorist_groups)
 
 ## Rate of change
 roc_weighted <- roc(aorist_weighted, n = 30)
@@ -92,7 +106,7 @@ plot(roc_weighted)
 
 ## Rate of change by group
 roc_groups <- roc(aorist_groups, n = 30)
-plot(roc_groups)
+plot(roc_groups, flip = TRUE)
 }
 \references{
 Crema, E. R. (2012). Modelling Temporal Uncertainty in Archaeological
@@ -125,7 +139,7 @@ Analysis of High Volume Crime Patterns. \emph{Journal of Quantitative
 Criminology}, 18(1): 23-43. \doi{10.1023/A:1013240828824}.
 }
 \seealso{
-\code{\link[=roc]{roc()}}, \link[=plot_aoristic]{plot()}
+\code{\link[=roc]{roc()}}, \code{\link[=plot_aoristic]{plot()}}
 
 Other chronological analysis: 
 \code{\link{apportion}()},

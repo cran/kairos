@@ -5,11 +5,11 @@ knitr::opts_chunk$set(
 )
 
 ## ----packages-----------------------------------------------------------------
-## Install extra packages:
-## - khroma: colour schemes
+## Install extra packages (if needed):
+## - dimensio: multivariate analysis
 ## - folio: datasets
 ## - tabula: visualization
-# install.packages(c("khroma", "folio", "tabula"))
+# install.packages(c("dimensio", "folio", "tabula"))
 
 # Load packages
 library(kairos)
@@ -29,10 +29,8 @@ incidence1 <- matrix(bin, nrow = 20)
 incidence2 <- permute(incidence1, indices)
 
 ## Plot matrix
-tabula::plot_heatmap(incidence1) +
-  khroma::scale_fill_logical()
-tabula::plot_heatmap(incidence2) +
-  khroma::scale_fill_logical()
+tabula::plot_heatmap(incidence1, col = c("white", "black"))
+tabula::plot_heatmap(incidence2, col = c("white", "black"))
 
 ## ----average, fig.width=7, fig.height=3.5-------------------------------------
 ## Replicates Desachy 2004
@@ -51,56 +49,45 @@ compiegne_permuted <- permute(compiegne, indices)
 ## Plot frequencies and EPPM values
 tabula::seriograph(compiegne_permuted)
 
-## ----ca-ford, fig.width=5, fig.height=5---------------------------------------
-## Get data
+## ----ca-ford, fig.width=7, fig.height=7---------------------------------------
+## Data from Peeples and Schachner 2012
 data("zuni", package = "folio")
 
 ## Ford diagram
-tabula::plot_ford(zuni) +
-  ggplot2::theme(axis.text.y = ggplot2::element_blank())
+par(cex.axis = 0.7)
+tabula::plot_ford(zuni)
 
-## ----ca-seriation, fig.width=5, fig.height=5----------------------------------
+## ----ca-seriation, fig.width=7, fig.height=7----------------------------------
 ## Get row permutations from CA coordinates
 (zun_indices <- seriate_average(zuni, margin = c(1, 2)))
 
 ## Plot CA results
-dimensio::plot_rows(zun_indices) +
-  ggplot2::labs(title = "Rows") +
-  ggplot2::theme_bw()
+dimensio::biplot(zun_indices)
 
-## ----ca-permutation, fig.width=5, fig.height=5--------------------------------
+## ----ca-permutation, fig.width=7, fig.height=7--------------------------------
 ## Permute data matrix
 zuni_permuted <- permute(zuni, zun_indices)
 
 ## Ford diagram
-tabula::plot_ford(zuni_permuted) +
-  ggplot2::theme(axis.text.y = ggplot2::element_blank())
+par(cex.axis = 0.7)
+tabula::plot_ford(zuni_permuted)
 
-## ----bootstrap, warning=FALSE,fig.width=5, fig.height=5, out.width='50%', fig.show='hold'----
+## ----bootstrap, fig.width=7, fig.height=7, out.width='50%', fig.show='hold'----
 ## Partial bootstrap CA
 ## Warning: this may take a few seconds!
 zuni_boot <- dimensio::bootstrap(zun_indices, n = 30)
 
-## Plot convex hull
 ## Bootstrap CA results for the rows
+## (add convex hull)
 zuni_boot |> 
-  dimensio::plot_rows(active = FALSE, colour = "obs", fill = "obs") +
-  dimensio::stat_hull(alpha = 0.2) +
-  ggplot2::labs(title = "Rows") +
-  ggplot2::theme_bw() +
-  khroma::scale_colour_highcontrast() +
-  khroma::scale_fill_highcontrast()
+  dimensio::viz_rows(col = "lightgrey", pch = 16) |> 
+  dimensio::viz_hull(col = adjustcolor("#004488", alpha = 0.5))
 
 ## Bootstrap CA results for the columns
 zuni_boot |> 
-  dimensio::plot_columns(colour = "group", fill = "group") +
-  dimensio::stat_hull(alpha = 0.5) +
-  ggplot2::labs(title = "Columns") +
-  ggplot2::theme_bw() +
-  khroma::scale_colour_discreterainbow() +
-  khroma::scale_fill_discreterainbow()
+  dimensio::viz_columns(pch = 16)
 
-## ----refine, fig.width=5, fig.height=5----------------------------------------
+## ----refine, fig.width=7, fig.height=7----------------------------------------
 ## Replicates Peeples and Schachner 2012 results
 ## Samples with convex hull maximum dimension length greater than the cutoff
 ## value will be marked for removal.
@@ -109,31 +96,18 @@ fun <- function(x) { mean(x) + sd(x) }
 (zuni_refine <- seriate_refine(zun_indices, cutoff = fun, margin = 1))
 
 ## Plot CA results for the rows
-dimensio::plot_rows(zuni_refine, colour = "observation", fill = "observation") +
-  ggplot2::labs(title = "Rows") +
-  ggplot2::theme_bw() +
-  khroma::scale_colour_discreterainbow() +
-  khroma::scale_fill_discreterainbow()
+dimensio::viz_rows(zuni_refine, highlight = "observation", pch = c(16, 15))
 
-## ----refine-histogram, fig.width=5, fig.height=3.5----------------------------
+## ----refine-histogram, fig.width=7, fig.height=3.5----------------------------
 ## Histogram of convex hull maximum dimension length
-hull_length <- data.frame(length = zuni_refine[["length"]])
-ggplot2::ggplot(data = hull_length) +
-  ggplot2::aes(x = length) +
-  ggplot2::geom_histogram(breaks = seq(0, 4.5, by = 0.5), fill = "grey70") +
-  ggplot2::geom_vline(xintercept = zuni_refine[["cutoff"]], colour = "red") +
-  ggplot2::labs(
-    title = "Convex hull max. dim.", 
-    x = "Maximum length", 
-    y = "Count"
-  ) + 
-  ggplot2::theme_bw()
+hist(zuni_refine[["length"]], xlab = "Maximum length", main = "")
+abline(v = zuni_refine[["cutoff"]], col = "red")
 
-## ----refine-permutation, fig.width=5, fig.height=5----------------------------
+## ----refine-permutation, fig.width=7, fig.height=7----------------------------
 ## Permute data matrix
 zuni_permuted2 <- permute(zuni, zuni_refine)
 
 ## Ford diagram
-tabula::plot_ford(zuni_permuted2) +
-  ggplot2::theme(axis.text.y = ggplot2::element_blank())
+par(cex.axis = 0.7)
+tabula::plot_ford(zuni_permuted2)
 

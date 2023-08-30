@@ -6,14 +6,17 @@ knitr::opts_chunk$set(
 )
 
 ## ----packages-----------------------------------------------------------------
+## Install extra packages (if needed):
+# install.packages("folio") # datasets
+
 # Load packages
-library(folio) # Datasets
 library(kairos)
 
 ## ----event-model--------------------------------------------------------------
 ## Bellanger et al. did not publish the data supporting their demonstration: 
 ## no replication of their results is possible. 
-## Here is a pseudo-reproduction using the zuni dataset
+## Here is an example using the Zuni dataset from Peeples and Schachner 2012
+data("zuni", package = "folio")
 
 ## Assume that some assemblages are reliably dated (this is NOT a real example)
 ## The names of the vector entries must match the names of the assemblages
@@ -25,19 +28,37 @@ zuni_dates <- c(
 )
 
 ## Model the event and accumulation date for each assemblage
-model <- event(zuni, dates = zuni_dates, cutoff = 90)
-summary(get_model(model))
+model <- event(zuni, dates = zuni_dates, rank = 10)
 
+## Model summary
+## (results are expressed in rata die)
+summary(model)
+
+## Extract model coefficients
+## (convert results to Gregorian years)
+coef(model, calendar = CE())
+
+## Extract residual standard deviation
+## (convert results to Gregorian years)
+sigma(model, calendar = CE())
+
+## Extract model residuals
+## (convert results to Gregorian years)
+resid(model, calendar = CE())
+
+## Extract model fitted values
+## (convert results to Gregorian years)
+fitted(model, calendar = CE())
+
+## ----event-predict------------------------------------------------------------
 ## Estimate event dates
-event <- predict_event(model, margin = 1, level = 0.95)
-head(event)
+## (results are expressed in rata die)
+eve <- predict_event(model, margin = 1, level = 0.95)
+head(eve)
 
-## Estimate accumulation dates
-acc <- predict_accumulation(model)
-head(acc)
-
-## ----event-plot---------------------------------------------------------------
+## ----event-plot, fig.width=7, fig.height=7------------------------------------
 ## Activity plot
+plot(model, type = "activity", event = TRUE, select = 1:6)
 plot(model, type = "activity", event = TRUE, select = "LZ1105")
 
 ## Tempo plot
@@ -45,6 +66,7 @@ plot(model, type = "tempo", select = "LZ1105")
 
 ## ----event-refine, warning=FALSE----------------------------------------------
 ## Check model variability
+## (results are expressed in rata die)
 ## Warning: this may take a few seconds
 
 ## Jackknife fabrics

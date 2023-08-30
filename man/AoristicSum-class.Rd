@@ -11,26 +11,28 @@ An S4 class to represent an aoristic analysis results.
 \section{Slots}{
 
 \describe{
-\item{\code{from}}{A \code{\link{numeric}} vector.}
-
-\item{\code{to}}{A \code{\link{numeric}} vector.}
-
-\item{\code{step}}{A length-one \code{\link{numeric}} vector giving the time-blocks width.}
+\item{\code{breaks}}{A \code{\linkS4class{RataDie}} vector giving the date break between
+time-blocks.}
 
 \item{\code{weights}}{A \code{\link{numeric}} vector.}
 
-\item{\code{breaks}}{A \code{\link{numeric}} vector giving the date break between time-blocks.}
-
-\item{\code{blocks}}{A \code{\link{character}} vector giving the time-blocks.}
+\item{\code{groups}}{A \code{\link{character}} vector to store the group names (if any).}
 
 \item{\code{p}}{A \code{\link{numeric}} \code{\link{array}} giving the aorisitic probabilities.}
-
-\item{\code{groups}}{A \code{\link{character}} vector.}
 }}
 
 \note{
-This class inherits from base \code{\link{matrix}}.
+This class inherits from \code{\link[aion:TimeSeries-class]{aion::TimeSeries}}: dates are internally
+stored as \emph{\link[aion:RataDie-class]{rata die}}.
 }
+\section{Coerce}{
+
+In the code snippets below, \code{x} is an \code{AoristicSum} object.
+\describe{
+\item{\code{as.data.frame(x)}}{Coerces to a \code{\link{data.frame}}.}
+}
+}
+
 \seealso{
 Other classes: 
 \code{\link{CountApportion-class}},
@@ -45,3 +47,4 @@ Other classes:
 N. Frerebeau
 }
 \concept{classes}
+\keyword{internal}

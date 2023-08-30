@@ -1,3 +1,4 @@
+## Data from Crema et al. 2016
 data("merzbach", package = "folio")
 
 ## Coerce the merzbach dataset to a count matrix
@@ -10,5 +11,4 @@ counts <- merzbach[, keep]
 dates <- as.numeric(utils::as.roman(rownames(counts)))
 
 ## Plot abundance vs time
-plot_time(counts, dates)
-plot_time(counts, dates, facet = TRUE)
+plot_time(counts, dates, calendar = NULL, ncol = 3, xlab = "Phases")

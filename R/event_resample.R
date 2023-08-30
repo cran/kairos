@@ -7,16 +7,16 @@ NULL
 #' @aliases jackknife,EventDate-method
 setMethod(
   f = "jackknife",
-  signature = signature(object = "EventDate"),
+  signature = c(object = "EventDate"),
   definition = function(object, level = 0.95,
                         progress = getOption("kairos.progress"), ...) {
     ## Get data
-    fit_model <- get_model(object)
-    fit_dates <- get_dates(object)
+    fit_model <- object@model
+    fit_dates <- time(object)
     fit_data <- object@data
     fit_dim <- object@keep
 
-    event <- predict_event(object, level = level)
+    event <- predict_event(object, level = level, calendar = NULL)
 
     ## TODO: check cutoff value
     jack_values <- compute_date_jack(fit_data, fit_dates, rank = length(fit_dim),
@@ -44,11 +44,11 @@ setMethod(
 #' @aliases bootstrap,EventDate-method
 setMethod(
   f = "bootstrap",
-  signature = signature(object = "EventDate"),
+  signature = c(object = "EventDate"),
   definition = function(object, level = 0.95, probs = c(0.05, 0.95), n = 1000,
                         progress = getOption("kairos.progress"), ...) {
     ## Get data
-    fit_model <- get_model(object)
+    fit_model <- object@model
     fit_dim <- object@keep
 
     ## Partial bootstrap CA
@@ -75,22 +75,20 @@ setMethod(
 #' Bootstrap Resampling of Assemblages
 #'
 #' Computes date event bootstraped statistics for each replicated sample.
-#' @param x A \code{\link{numeric}} matrix of bootstrap replicates.
-#' @param axes A \code{\link{numeric}} vector giving the subscripts
-#'  of the CA components to keep.
-#' @param model An object of class \code{\link[stats]{lm}}.
-#' @param level A length-one \code{\link{numeric}} vector giving the
-#'  confidence level.
-#' @param probs A \code{\link{numeric}} vector of probabilities with values in
-#'  \eqn{[0,1]} (see \code{\link[stats:quantile]{quantile}}).
-#' @return A \code{\link{numeric}} vector with the following elements:
+#' @param x A [`numeric`] matrix of bootstrap replicates.
+#' @param axes A [`numeric`] vector giving the subscripts of the CA components
+#'  to keep.
+#' @param model An object of class [`lm`][stats::lm()].
+#' @param level A length-one [`numeric`] vector giving the confidence level.
+#' @param probs A [`numeric`] vector of probabilities with values in \eqn{[0,1]}
+#'  (see [stats:quantile()]).
+#' @return A [`numeric`] vector with the following elements:
 #'  \describe{
-#'   \item{id}{An identifier to link each row to an assemblage.}
-#'   \item{min}{Minimum value.}
-#'   \item{mean}{Mean value (event date).}
-#'   \item{max}{Maximum value.}
-#'   \item{Q05}{Sample quantile to 0.05 probability.}
-#'   \item{Q95}{Sample quantile to 0.95 probability.}
+#'   \item{`min`}{Minimum value.}
+#'   \item{`mean`}{Mean value (event date).}
+#'   \item{`max`}{Maximum value.}
+#'   \item{`Q05`}{Sample quantile to 0.05 probability.}
+#'   \item{`Q95`}{Sample quantile to 0.95 probability.}
 #'  }
 #' @author N. Frerebeau
 #' @keywords internal
@@ -112,13 +110,12 @@ compute_date_boot <- function(x, axes, model, level, probs = c(0.05, 0.95)) {
 #' Jackknife Fabrics
 #'
 #' Compute date event jackknifed statistics for each replicated sample.
-#' @param x A \code{\link{numeric}} matrix of count data.
-#' @param dates A \code{\link{numeric}} vector of known dates.
-#' @param rank A \code{\link{numeric}} value.
-#' @param progress A \code{\link{logical}} scalar: should a progress bar be
-#'  displayed?
-#' @param ... Further arguments to be passed to \code{\link[ca]{ca}}.
-#' @return A \code{\link{numeric}} vector of linear model coefficients.
+#' @param x A [`numeric`] matrix of count data.
+#' @param dates A [`numeric`] vector of known dates.
+#' @param rank A [`numeric`] value.
+#' @param progress A [`logical`] scalar: should a progress bar be displayed?
+#' @param ... Currently not used].
+#' @return A [`numeric`] vector of linear model coefficients.
 #' @author N. Frerebeau
 #' @keywords internal
 #' @noRd
@@ -137,7 +134,7 @@ compute_date_jack <- function(x, dates, rank = 10,
     ## TODO: warning
     if (any(rowSums(counts) == 0)) next
     model <- event(counts, dates = dates, rank = rank)
-    jack[[j]] <- stats::coef(get_model(model)) # Get model coefficients
+    jack[[j]] <- coef(model) # Get model coefficients
     if (progress_bar) utils::setTxtProgressBar(pbar, j)
   }
 

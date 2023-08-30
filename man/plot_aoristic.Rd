@@ -3,42 +3,95 @@
 \docType{methods}
 \name{plot_aoristic}
 \alias{plot_aoristic}
-\alias{autoplot,AoristicSum-method}
 \alias{plot,AoristicSum,missing-method}
-\alias{autoplot,RateOfChange-method}
+\alias{image,AoristicSum-method}
 \alias{plot,RateOfChange,missing-method}
 \title{Plot Aoristic Analysis}
 \usage{
-\S4method{autoplot}{AoristicSum}(object, ..., facet = TRUE)
+\S4method{plot}{AoristicSum,missing}(
+  x,
+  calendar = getOption("kairos.calendar"),
+  type = c("bar"),
+  flip = FALSE,
+  ncol = NULL,
+  main = NULL,
+  sub = NULL,
+  ann = graphics::par("ann"),
+  axes = TRUE,
+  frame.plot = axes,
+  panel.first = NULL,
+  panel.last = NULL,
+  ...
+)
 
-\S4method{plot}{AoristicSum,missing}(x, facet = TRUE, ...)
+\S4method{image}{AoristicSum}(x, calendar = getOption("kairos.calendar"), ...)
 
-\S4method{autoplot}{RateOfChange}(object, ..., level = 0.95, facet = TRUE)
-
-\S4method{plot}{RateOfChange,missing}(x, level = 0.95, facet = TRUE, ...)
+\S4method{plot}{RateOfChange,missing}(
+  x,
+  calendar = getOption("kairos.calendar"),
+  level = 0.95,
+  flip = FALSE,
+  ncol = NULL,
+  main = NULL,
+  sub = NULL,
+  ann = graphics::par("ann"),
+  axes = TRUE,
+  frame.plot = axes,
+  panel.first = NULL,
+  panel.last = NULL,
+  ...
+)
 }
 \arguments{
-\item{object, x}{An \linkS4class{AoristicSum} object.}
+\item{x}{An \code{\linkS4class{AoristicSum}} object.}
 
-\item{...}{Currently not used.}
+\item{calendar}{A \code{\linkS4class{TimeScale}} object specifying the target calendar
+(see \code{\link[aion:calendar]{calendar()}}).}
 
-\item{facet}{A \code{\link{logical}} scalar: should a matrix of panels defined by
-groups be drawn?}
+\item{type}{A \code{\link{character}} string specifying whether bar or density should
+be plotted? It must be one of "\code{bar}" or "\code{density}". Any unambiguous
+substring can be given.}
+
+\item{flip}{A \code{\link{logical}} scalar: should the y-axis (ticks and numbering) be
+flipped from side 2 (left) to 4 (right) from series to series when \code{facet}
+is "\code{multiple}"?}
+
+\item{ncol}{An \code{\link{integer}} specifying the number of columns to use when
+\code{facet} is "\code{multiple}". Defaults to 1 for up to 4 series, otherwise to 2.}
+
+\item{main}{A \code{\link{character}} string giving a main title for the plot.}
+
+\item{sub}{A \code{\link{character}} string giving a subtitle for the plot.}
+
+\item{ann}{A \code{\link{logical}} scalar: should the default annotation (title and x
+and y axis labels) appear on the plot?}
+
+\item{axes}{A \code{\link{logical}} scalar: should axes be drawn on the plot?}
+
+\item{frame.plot}{A \code{\link{logical}} scalar: should a box be drawn around the
+plot?}
+
+\item{panel.first}{An an \code{expression} to be evaluated after the plot axes are
+set up but before any plotting takes place. This can be useful for drawing
+background grids.}
+
+\item{panel.last}{An \code{expression} to be evaluated after plotting has taken
+place but before the axes, title and box are added.}
+
+\item{...}{Further parameters to be passed to \code{panel}
+(e.g. \link[graphics:par]{graphical parameters}).}
 
 \item{level}{A length-one \code{\link{numeric}} vector giving the confidence level.}
 }
 \value{
-\itemize{
-\item \code{autoplot()} returns a \code{\link[ggplot2:ggplot]{ggplot}} object.
-\item \code{plot()} is called it for its side-effects: it results in a graphic being
+\code{plot()} is called it for its side-effects: it results in a graphic being
 displayed (invisibly returns \code{x}).
-}
 }
 \description{
 Plot Aoristic Analysis
 }
 \examples{
-## Aoristic Analysis
+## Data from Husi 2022
 data("loire", package = "folio")
 
 ## Get time range
@@ -46,16 +99,17 @@ loire_range <- loire[, c("lower", "upper")]
 
 ## Calculate aoristic sum (normal)
 aorist_raw <- aoristic(loire_range, step = 50, weight = FALSE)
-plot(aorist_raw)
+plot(aorist_raw, col = "grey")
 
 ## Calculate aoristic sum (weights)
 aorist_weighted <- aoristic(loire_range, step = 50, weight = TRUE)
-plot(aorist_weighted)
+plot(aorist_weighted, col = "grey")
 
 ## Calculate aoristic sum (weights) by group
 aorist_groups <- aoristic(loire_range, step = 50, weight = TRUE,
                           groups = loire$area)
-plot(aorist_groups)
+plot(aorist_groups, flip = TRUE, col = "grey")
+image(aorist_groups)
 
 ## Rate of change
 roc_weighted <- roc(aorist_weighted, n = 30)
@@ -63,7 +117,7 @@ plot(roc_weighted)
 
 ## Rate of change by group
 roc_groups <- roc(aorist_groups, n = 30)
-plot(roc_groups)
+plot(roc_groups, flip = TRUE)
 }
 \seealso{
 \code{\link[=aoristic]{aoristic()}}, \code{\link[=roc]{roc()}}

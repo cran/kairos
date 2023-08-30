@@ -15,7 +15,7 @@ A toolkit for absolute and relative dating and analysis of chronological pattern
 \tabular{ll}{
 \strong{Package:} \tab kairos \cr
 \strong{Type:} \tab Package \cr
-\strong{Version:} \tab 1.2.0 \cr
+\strong{Version:} \tab 2.0.0 \cr
 \strong{License:} \tab GPL-3 \cr
 }
 }
@@ -23,8 +23,6 @@ A toolkit for absolute and relative dating and analysis of chronological pattern
 
 \code{kairos} uses the following \code{\link[=options]{options()}} to configure behavior:
 \itemize{
-\item \code{kairos.precision}: an \code{\link{integer}} indicating the number of decimal
-places for years (defaults to \eqn{0}).
 \item \code{kairos.progress}: a \code{\link{logical}} scalar. Should progress bars be
 displayed?
 }

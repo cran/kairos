@@ -1,3 +1,20 @@
+# kairos 2.0.0
+## New classes and methods
+* Add `image()` methods.
+* Add `coef()`, `fitted()`, `residuals()`, `sigma()` and `terms()` to extract values from `EventDate` objects.
+
+## Internals
+* `MeanDate`, `AoristicSum`, `RateOfChange` and `IncrementTest` classes now inherit from `TimeSeries` (see **aion**).
+* Use **tinytest** instead of **testthat**.
+
+## Bugfixes & changes
+* Remove previously deprecated methods.
+
+## Breaking changes
+* Use **aion** for internal date representation.
+* Use **graphics** instead of **ggplot2** to reduce hard dependencies (remove all `autoplot()` methods).
+* For consistency, all `mcd()` methods now return a `MeanDate` object.
+
 # kairos 1.2.0
 ## New classes and methods
 * Add `seriate_refine()` method for `PermutationOrder` objects.

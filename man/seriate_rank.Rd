@@ -15,8 +15,10 @@ seriate_rank(object, ...)
 \S4method{seriate_rank}{matrix}(object, EPPM = FALSE, margin = c(1, 2), stop = 100)
 }
 \arguments{
-\item{object}{An \eqn{m \times p}{m x p} \code{numeric} \code{\link{matrix}} or a
-\code{\link{data.frame}} of count data (absolute frequencies).}
+\item{object}{A \eqn{m \times p}{m x p} \code{numeric} \code{\link{matrix}} or
+\code{\link{data.frame}} of count data (absolute frequencies giving the number of
+individuals for each category, i.e. a contingency table). A \code{\link{data.frame}}
+will be coerced to a \code{numeric} \code{matrix} via \code{\link[=data.matrix]{data.matrix()}}.}
 
 \item{...}{Currently not used.}
 
@@ -47,7 +49,6 @@ with a warning.
 }
 \examples{
 ## Replicates Desachy 2004 results
-## Coerce dataset to abundance matrix
 data("compiegne", package = "folio")
 
 ## Get seriation order for columns on EPPM using the reciprocal averaging method
