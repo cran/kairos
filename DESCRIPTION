@@ -1,7 +1,7 @@
 Package: kairos
 Title: Analysis of Chronological Patterns from Archaeological Count
         Data
-Version: 2.0.0
+Version: 2.0.1
 Authors@R: c(
     person("Nicolas", "Frerebeau", , "nicolas.frerebeau@u-bordeaux-montaigne.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5759-4944", affiliation = "Université Bordeaux Montaigne")),
@@ -38,7 +38,7 @@ Collate: 'AllClasses.R' 'AllGenerics.R' 'aoristic.R' 'apportion.R'
         'seriate_rank.R' 'seriate_refine.R' 'show.R' 'subset.R'
         'summary.R' 'validate.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2023-08-30 11:47:31 UTC; nicolas
+Packaged: 2023-09-04 09:02:22 UTC; nicolas
 Author: Nicolas Frerebeau [aut, cre] (<https://orcid.org/0000-0001-5759-4944>,
     Université Bordeaux Montaigne),
   Brice Lebrun [ctb] (<https://orcid.org/0000-0001-7503-8685>, Université
@@ -49,4 +49,4 @@ Author: Nicolas Frerebeau [aut, cre] (<https://orcid.org/0000-0001-5759-4944>,
     Université de Nantes)
 Maintainer: Nicolas Frerebeau <nicolas.frerebeau@u-bordeaux-montaigne.fr>
 Repository: CRAN
-Date/Publication: 2023-08-30 12:40:02 UTC
+Date/Publication: 2023-09-05 08:30:02 UTC
