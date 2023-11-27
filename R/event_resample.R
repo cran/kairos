@@ -53,7 +53,7 @@ setMethod(
 
     ## Partial bootstrap CA
     ## /!\ Be careful: EventDate inherits from CA
-    ca_boot <- dimensio::bootstrap(object, n = n)
+    ca_boot <- methods::callNextMethod(object, n = n)
     ca_rep_row <- dimensio::get_replications(ca_boot, margin = 1)
 
     ## Bootstrap assemblages

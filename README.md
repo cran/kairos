@@ -10,7 +10,8 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/tesselle/kairos/badge)](https://www.codefactor.io/repository/github/tesselle/kairos)
 [![Dependencies](https://tinyverse.netlify.com/badge/kairos)](https://cran.r-project.org/package=kairos)
 
-<a href="https://tesselle.r-universe.dev" class="pkgdown-devel"><img
+<a href="https://tesselle.r-universe.dev/kairos"
+class="pkgdown-devel"><img
 src="https://tesselle.r-universe.dev/badges/kairos"
 alt="r-universe" /></a>
 <a href="https://cran.r-project.org/package=kairos"
@@ -58,10 +59,10 @@ analysis of archaeological count data.
       Frerebeau N (2023). _kairos: Analysis of Chronological Patterns from
       Archaeological Count Data_. Université Bordeaux Montaigne, Pessac,
       France. doi:10.5281/zenodo.5653896
-      <https://doi.org/10.5281/zenodo.5653896>, R package version 2.0.1,
+      <https://doi.org/10.5281/zenodo.5653896>, R package version 2.0.2,
       <https://packages.tesselle.org/kairos/>.
 
-    Une entrée BibTeX pour les utilisateurs LaTeX est
+    A BibTeX entry for LaTeX users is
 
       @Manual{,
         author = {Nicolas Frerebeau},
@@ -69,7 +70,7 @@ analysis of archaeological count data.
         year = {2023},
         organization = {Université Bordeaux Montaigne},
         address = {Pessac, France},
-        note = {R package version 2.0.1},
+        note = {R package version 2.0.2},
         url = {https://packages.tesselle.org/kairos/},
         doi = {10.5281/zenodo.5653896},
       }
