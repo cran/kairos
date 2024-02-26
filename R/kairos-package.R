@@ -2,7 +2,7 @@
 #' \tabular{ll}{
 #'  **Package:** \tab kairos \cr
 #'  **Type:** \tab Package \cr
-#'  **Version:** \tab 2.0.2 \cr
+#'  **Version:** \tab 2.1.0 \cr
 #'  **License:** \tab GPL-3 \cr
 #' }
 #'
@@ -10,6 +10,8 @@
 #'  `kairos` uses the following [options()] to configure behavior:
 #'  * `kairos.progress`: a [`logical`] scalar. Should progress bars be
 #'    displayed?
+#'  * `kairos.calendar`: a [`aion::TimeScale-class`] object (default calendar
+#'    for printing).
 #'
 #' @author
 #' **Full list of authors and contributors** (alphabetic order)
@@ -39,8 +41,6 @@
 
 #' @import arkhe
 #' @import aion
-#' @importFrom dimensio ca get_coordinates get_data get_eigenvalues
-#' get_replications predict
 #' @importFrom extraDistr ptnorm
 #' @importFrom grDevices xy.coords
 #' @importFrom methods as callGeneric callNextMethod new setClass setGeneric

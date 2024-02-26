@@ -6,10 +6,9 @@ knitr::opts_chunk$set(
 
 ## ----packages-----------------------------------------------------------------
 ## Install extra packages (if needed):
-## - dimensio: multivariate analysis
 ## - folio: datasets
 ## - tabula: visualization
-# install.packages(c("dimensio", "folio", "tabula"))
+# install.packages(c("folio", "tabula"))
 
 # Load packages
 library(kairos)
@@ -62,7 +61,7 @@ tabula::plot_ford(zuni)
 (zun_indices <- seriate_average(zuni, margin = c(1, 2)))
 
 ## Plot CA results
-dimensio::biplot(zun_indices)
+biplot(zun_indices)
 
 ## ----ca-permutation, fig.width=7, fig.height=7--------------------------------
 ## Permute data matrix
@@ -75,17 +74,17 @@ tabula::plot_ford(zuni_permuted)
 ## ----bootstrap, fig.width=7, fig.height=7, out.width='50%', fig.show='hold'----
 ## Partial bootstrap CA
 ## Warning: this may take a few seconds!
-zuni_boot <- dimensio::bootstrap(zun_indices, n = 30)
+zuni_boot <- bootstrap(zun_indices, n = 30)
 
 ## Bootstrap CA results for the rows
 ## (add convex hull)
 zuni_boot |> 
-  dimensio::viz_rows(col = "lightgrey", pch = 16) |> 
-  dimensio::viz_hull(col = adjustcolor("#004488", alpha = 0.5))
+  viz_rows(col = "lightgrey", pch = 16, legend = NULL) |> 
+  viz_hull(col = adjustcolor("#004488", alpha = 0.2))
 
 ## Bootstrap CA results for the columns
 zuni_boot |> 
-  dimensio::viz_columns(pch = 16)
+  viz_columns(pch = 16, legend = list(x = "topright"))
 
 ## ----refine, fig.width=7, fig.height=7----------------------------------------
 ## Replicates Peeples and Schachner 2012 results
@@ -96,12 +95,11 @@ fun <- function(x) { mean(x) + sd(x) }
 (zuni_refine <- seriate_refine(zun_indices, cutoff = fun, margin = 1))
 
 ## Plot CA results for the rows
-dimensio::viz_rows(zuni_refine, highlight = "observation", pch = c(16, 15))
+viz_rows(zuni_refine, highlight = "observation", pch = c(16, 15))
 
-## ----refine-histogram, fig.width=7, fig.height=3.5----------------------------
+## ----refine-histogram, fig.width=5, fig.height=5------------------------------
 ## Histogram of convex hull maximum dimension length
-hist(zuni_refine[["length"]], xlab = "Maximum length", main = "")
-abline(v = zuni_refine[["cutoff"]], col = "red")
+hist(zuni_refine)
 
 ## ----refine-permutation, fig.width=7, fig.height=7----------------------------
 ## Permute data matrix

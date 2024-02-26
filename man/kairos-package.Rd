@@ -3,7 +3,6 @@
 \docType{package}
 \name{kairos-package}
 \alias{kairos-package}
-\alias{_PACKAGE}
 \alias{kairos}
 \title{kairos: Analysis of Chronological Patterns from Archaeological Count Data}
 \description{
@@ -15,7 +14,7 @@ A toolkit for absolute and relative dating and analysis of chronological pattern
 \tabular{ll}{
 \strong{Package:} \tab kairos \cr
 \strong{Type:} \tab Package \cr
-\strong{Version:} \tab 2.0.2 \cr
+\strong{Version:} \tab 2.1.0 \cr
 \strong{License:} \tab GPL-3 \cr
 }
 }
@@ -25,6 +24,8 @@ A toolkit for absolute and relative dating and analysis of chronological pattern
 \itemize{
 \item \code{kairos.progress}: a \code{\link{logical}} scalar. Should progress bars be
 displayed?
+\item \code{kairos.calendar}: a \code{\link[aion:TimeScale-class]{aion::TimeScale}} object (default calendar
+for printing).
 }
 }
 
