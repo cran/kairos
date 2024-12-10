@@ -121,15 +121,11 @@ sim <- simulate(mc_dates, nsim = 30)
 plot(sim, interval = "range", pch = 16)
 }
 \seealso{
-\code{\link[=mcd]{mcd()}}
-
-Other plotting methods: 
-\code{\link{plot_aoristic}},
-\code{\link{plot_event}},
-\code{\link{plot_fit}},
-\code{\link{plot_time}()}
+Other mean ceramic date tools: 
+\code{\link{mcd}()},
+\code{\link{resample_mcd}}
 }
 \author{
 N. Frerebeau
 }
-\concept{plotting methods}
+\concept{mean ceramic date tools}

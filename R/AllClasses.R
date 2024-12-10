@@ -92,7 +92,8 @@ NULL
 #' An S4 class to represent an aoristic analysis results.
 #' @slot breaks An [`aion::RataDie-class`] vector giving the date break between
 #'  time-blocks.
-#' @slot weights A [`numeric`] vector.
+#' @slot span An [`aion::RataDie-class`] vector giving the duration of
+#'  time-blocks.
 #' @slot groups A [`character`] vector to store the group names (if any).
 #' @slot p A [`numeric`] [`array`] giving the aorisitic probabilities.
 #' @section Coerce:
@@ -112,7 +113,7 @@ NULL
   Class = "AoristicSum",
   slots = c(
     breaks = "RataDie",
-    weights = "numeric",
+    span = "RataDie",
     groups = "character",
     p = "array"
   ),
@@ -254,30 +255,4 @@ NULL
 .AveragePermutationOrder <- setClass(
   Class = "AveragePermutationOrder",
   contains = c("PermutationOrder", "CA")
-)
-
-# RefineCA =====================================================================
-#' Partial Bootstrap CA
-#'
-#' An S4 class to store partial bootstrap correspondence analysis results.
-#' @slot length A [`numeric`] vector giving the convex hull maximum
-#'  dimension length.
-#' @slot cutoff A length-one [`numeric`] vector giving the cutoff value for
-#'  samples selection.
-#' @slot keep An [`integer`] vector giving the subscript of the variables
-#'  to be kept.
-#' @author N. Frerebeau
-#' @family classes
-#' @docType class
-#' @aliases RefineCA-class
-#' @keywords internal
-.RefinePermutationOrder <- setClass(
-  Class = "RefinePermutationOrder",
-  slots = c(
-    length = "numeric",
-    cutoff = "numeric",
-    keep = "integer",
-    margin = "integer"
-  ),
-  contains = "AveragePermutationOrder"
 )

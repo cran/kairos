@@ -14,7 +14,8 @@ An S4 class to represent an aoristic analysis results.
 \item{\code{breaks}}{An \code{\link[aion:RataDie-class]{aion::RataDie}} vector giving the date break between
 time-blocks.}
 
-\item{\code{weights}}{A \code{\link{numeric}} vector.}
+\item{\code{span}}{An \code{\link[aion:RataDie-class]{aion::RataDie}} vector giving the duration of
+time-blocks.}
 
 \item{\code{groups}}{A \code{\link{character}} vector to store the group names (if any).}
 
@@ -40,8 +41,7 @@ Other classes:
 \code{\link{IncrementTest-class}},
 \code{\link{MeanDate-class}},
 \code{\link{PermutationOrder-class}},
-\code{\link{RateOfChange-class}},
-\code{\link{RefinePermutationOrder-class}}
+\code{\link{RateOfChange-class}}
 }
 \author{
 N. Frerebeau

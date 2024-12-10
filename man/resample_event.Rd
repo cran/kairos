@@ -7,13 +7,21 @@
 \alias{bootstrap,EventDate-method}
 \title{Resample Event Dates}
 \usage{
-\S4method{jackknife}{EventDate}(object, level = 0.95, progress = getOption("kairos.progress"), ...)
+\S4method{jackknife}{EventDate}(
+  object,
+  level = 0.95,
+  calendar = getOption("kairos.calendar"),
+  progress = getOption("kairos.progress"),
+  verbose = getOption("kairos.verbose"),
+  ...
+)
 
 \S4method{bootstrap}{EventDate}(
   object,
   level = 0.95,
   probs = c(0.05, 0.95),
   n = 1000,
+  calendar = getOption("kairos.calendar"),
   progress = getOption("kairos.progress"),
   ...
 )
@@ -23,7 +31,13 @@
 
 \item{level}{A length-one \code{\link{numeric}} vector giving the confidence level.}
 
+\item{calendar}{An \code{\link[aion:TimeScale-class]{aion::TimeScale}} object specifying the target
+calendar (see \code{\link[aion:calendar]{aion::calendar()}}). If \code{NULL}, \emph{rata die} are returned.}
+
 \item{progress}{A \code{\link{logical}} scalar: should a progress bar be displayed?}
+
+\item{verbose}{A \code{\link{logical}} scalar: should \R report extra information
+on progress?}
 
 \item{...}{Further arguments to be passed to internal methods.}
 
@@ -52,8 +66,8 @@ the resampling procedure (jackknifing fabrics) for each assemblage (in rows)
 with the following columns:
 \describe{
 \item{\code{mean}}{The jackknife mean (event date).}
-\item{\code{bias}}{The jackknife estimate of bias.}
-\item{\code{error}}{The standard error of predicted means.}
+\item{\code{lower}}{The lower boundary of the confidence interval.}
+\item{\code{upper}}{The upper boundary of the confidence interval.}
 }
 
 If \code{bootstrap()} is used, a large number of new bootstrap assemblages is
@@ -74,12 +88,14 @@ with the following columns:
 }
 }
 \seealso{
-\code{\link[=event]{event()}}
-
-Other resampling methods: 
-\code{\link{resample_mcd}}
+Other event date tools: 
+\code{\link{density_event}()},
+\code{\link{event}()},
+\code{\link{model_event}},
+\code{\link{plot_event}},
+\code{\link{predict_event}()}
 }
 \author{
 N. Frerebeau
 }
-\concept{resampling methods}
+\concept{event date tools}

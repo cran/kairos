@@ -84,28 +84,34 @@ zuni_boot |>
 
 ## Bootstrap CA results for the columns
 zuni_boot |> 
-  viz_columns(pch = 16, legend = list(x = "topright"))
+  viz_columns(pch = 16, color = NULL, legend = list(x = "topright"))
 
-## ----refine, fig.width=7, fig.height=7----------------------------------------
+## ----refine-------------------------------------------------------------------
 ## Replicates Peeples and Schachner 2012 results
-## Samples with convex hull maximum dimension length greater than the cutoff
-## value will be marked for removal.
 ## Define cutoff as one standard deviation above the mean
 fun <- function(x) { mean(x) + sd(x) }
-(zuni_refine <- seriate_refine(zun_indices, cutoff = fun, margin = 1))
 
-## Plot CA results for the rows
-viz_rows(zuni_refine, highlight = "observation", pch = c(16, 15))
+## Samples with convex hull maximum dimension length greater than the cutoff
+## value will be marked for removal.
+zuni_refine <- refine(zuni_boot, cutoff = fun, margin = 1)
 
 ## ----refine-histogram, fig.width=5, fig.height=5------------------------------
 ## Histogram of convex hull maximum dimension length
-hist(zuni_refine)
+hist(zuni_refine$length, xlab = "Maximum length", main = NULL)
+abline(v = zuni_refine$cutoff, col = "red", lty = 2) # Cutoff value
 
 ## ----refine-permutation, fig.width=7, fig.height=7----------------------------
+## Compute seriation with supplementary rows
+zuni_supp <- seriate_average(zuni, margin = c(1, 2), sup_row = zuni_refine$exclude)
+
+## Plot CA results
+## (highlight supplementary rows)
+viz_rows(zuni_supp, extra_quali = "observation", symbol = c(16, 15))
+
+## ----refine-ford, fig.width=7, fig.height=7-----------------------------------
 ## Permute data matrix
-zuni_permuted2 <- permute(zuni, zuni_refine)
+zuni_permuted2 <- permute(zuni, zuni_supp)
 
 ## Ford diagram
-par(cex.axis = 0.7)
 tabula::plot_ford(zuni_permuted2)
 

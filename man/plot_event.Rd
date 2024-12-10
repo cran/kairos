@@ -4,7 +4,7 @@
 \name{plot_event}
 \alias{plot_event}
 \alias{plot,EventDate,missing-method}
-\title{Event Plot}
+\title{Plot Event and Accumulation Dates}
 \usage{
 \S4method{plot}{EventDate,missing}(
   x,
@@ -39,7 +39,7 @@ Any unambiguous substring can be given.}
 be displayed? Only used if type is "\code{activity}".}
 
 \item{calendar}{An \code{\link[aion:TimeScale-class]{aion::TimeScale}} object specifying the target
-calendar (see \code{\link[=calendar]{calendar()}}).}
+calendar (see \code{\link[aion:calendar]{aion::calendar()}}).}
 
 \item{select}{A \code{\link{numeric}} or \code{\link{character}} vector giving the selection of
 the assemblage that are drawn.}
@@ -138,13 +138,14 @@ Snippets}, 93(1), 1-25. \doi{10.18637/jss.v093.c01}.
 
 \code{\link[=event]{event()}}
 
-Other plotting methods: 
-\code{\link{plot_aoristic}},
-\code{\link{plot_fit}},
-\code{\link{plot_mcd}},
-\code{\link{plot_time}()}
+Other event date tools: 
+\code{\link{density_event}()},
+\code{\link{event}()},
+\code{\link{model_event}},
+\code{\link{predict_event}()},
+\code{\link{resample_event}}
 }
 \author{
 N. Frerebeau
 }
-\concept{plotting methods}
+\concept{event date tools}
