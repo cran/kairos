@@ -10,9 +10,9 @@
 \usage{
 plot_time(object, dates, ...)
 
-\S4method{plot_time}{data.frame,numeric}(object, dates, calendar = getOption("kairos.calendar"), ...)
+\S4method{plot_time}{data.frame,numeric}(object, dates, calendar = get_calendar(), ...)
 
-\S4method{plot_time}{matrix,numeric}(object, dates, calendar = getOption("kairos.calendar"), ...)
+\S4method{plot_time}{matrix,numeric}(object, dates, calendar = get_calendar(), ...)
 }
 \arguments{
 \item{object}{A \eqn{m \times p}{m x p} \code{numeric} \code{\link{matrix}} or
@@ -25,7 +25,7 @@ will be coerced to a \code{numeric} \code{matrix} via \code{\link[=data.matrix]{
 \item{...}{Further parameters to be passed to \code{\link[aion:plot]{aion::plot()}}.}
 
 \item{calendar}{An \code{\link[aion:TimeScale-class]{aion::TimeScale}} object specifying the target
-calendar (see \code{\link[=calendar]{calendar()}}).}
+calendar (see \code{\link[aion:calendar]{aion::calendar()}}).}
 }
 \value{
 \code{plot_time()} is called it for its side-effects: it results in a graphic

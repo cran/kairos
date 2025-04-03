@@ -5,9 +5,8 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/tesselle/kairos/workflows/R-CMD-check/badge.svg)](https://github.com/tesselle/kairos/actions)
-[![codecov](https://codecov.io/gh/tesselle/kairos/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tesselle/kairos)
-[![CodeFactor](https://www.codefactor.io/repository/github/tesselle/kairos/badge)](https://www.codefactor.io/repository/github/tesselle/kairos)
+[![Code
+coverage](https://packages.tesselle.org/kairos/coverage/badge.svg)](https://packages.tesselle.org/kairos/coverage/)
 [![Dependencies](https://tinyverse.netlify.app/badge/kairos)](https://cran.r-project.org/package=kairos)
 
 <a href="https://tesselle.r-universe.dev/kairos"
@@ -60,10 +59,10 @@ analysis of archaeological count data.
 
 To cite kairos in publications use:
 
-Frerebeau N (2024). *kairos: Analysis of Chronological Patterns from
+Frerebeau N (2025). *kairos: Analysis of Chronological Patterns from
 Archaeological Count Data*. Université Bordeaux Montaigne, Pessac,
 France. <doi:10.5281/zenodo.5653896>
-<https://doi.org/10.5281/zenodo.5653896>, R package version 2.2.0,
+<https://doi.org/10.5281/zenodo.5653896>, R package version 2.2.1,
 <https://packages.tesselle.org/kairos/>.
 
 This package is a part of the tesselle project
@@ -78,11 +77,11 @@ You can install the released version of **kairos** from
 install.packages("kairos")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+And the development version from [Codeberg](https://codeberg.org/) with:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("tesselle/kairos")
+remotes::install_git("https://codeberg.org/tesselle/kairos")
 ```
 
 ## Usage
@@ -90,6 +89,7 @@ remotes::install_github("tesselle/kairos")
 ``` r
 ## Load packages
 library(kairos)
+#> Loading required package: aion
 #> Loading required package: dimensio
 ```
 
@@ -194,7 +194,7 @@ Pottery Quantification for the Dating of Some Archaeological Contexts.”
 
 ———. 2006b. “Une approche statistique pour la datation de contextes
 archéologiques.” *Revue de statistique appliquée* 54 (2): 65–81.
-<http://www.numdam.org/item/RSA_2006__54_2_65_0/>.
+<https://www.numdam.org/item/RSA_2006__54_2_65_0/>.
 
 </div>
 

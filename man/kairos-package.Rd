@@ -14,16 +14,15 @@ A toolkit for absolute and relative dating and analysis of chronological pattern
 \tabular{ll}{
 \strong{Package:} \tab kairos \cr
 \strong{Type:} \tab Package \cr
-\strong{Version:} \tab 2.2.0 \cr
+\strong{Version:} \tab 2.2.1 \cr
 \strong{License:} \tab GPL-3 \cr
+\strong{Zenodo:} \tab \doi{10.5281/zenodo.5653896} \cr
 }
 }
 \section{Package options}{
 
 \pkg{kairos} uses the following \code{\link[=options]{options()}} to configure behavior:
 \itemize{
-\item \code{kairos.calendar}: a \code{\link[aion:TimeScale-class]{aion::TimeScale}} object (default calendar
-for printing; see \code{\link[aion:calendar]{aion::calendar()}}).
 \item \code{kairos.progress}: a \code{\link{logical}} scalar. Should progress bars be
 displayed? Defaults to \code{\link[=interactive]{interactive()}}.
 \item \code{kairos.verbose}: a \code{\link{logical}} scalar. Should \R report extra information
@@ -34,9 +33,9 @@ on progress? Defaults to \code{\link[=interactive]{interactive()}}.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://codeberg.org/tesselle/kairos}
   \item \url{https://packages.tesselle.org/kairos/}
-  \item \url{https://github.com/tesselle/kairos}
-  \item Report bugs at \url{https://github.com/tesselle/kairos/issues}
+  \item Report bugs at \url{https://codeberg.org/tesselle/kairos/issues}
 }
 
 }

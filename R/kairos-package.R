@@ -2,14 +2,13 @@
 #' \tabular{ll}{
 #'  **Package:** \tab kairos \cr
 #'  **Type:** \tab Package \cr
-#'  **Version:** \tab 2.2.0 \cr
+#'  **Version:** \tab 2.2.1 \cr
 #'  **License:** \tab GPL-3 \cr
+#'  **Zenodo:** \tab \doi{10.5281/zenodo.5653896} \cr
 #' }
 #'
 #' @section Package options:
 #'  \pkg{kairos} uses the following [options()] to configure behavior:
-#'  * `kairos.calendar`: a [`aion::TimeScale-class`] object (default calendar
-#'    for printing; see [aion::calendar()]).
 #'  * `kairos.progress`: a [`logical`] scalar. Should progress bars be
 #'    displayed? Defaults to [interactive()].
 #'  * `kairos.verbose`: a [`logical`] scalar. Should \R report extra information

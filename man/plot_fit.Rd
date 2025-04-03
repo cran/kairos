@@ -8,7 +8,7 @@
 \usage{
 \S4method{plot}{IncrementTest,missing}(
   x,
-  calendar = getOption("kairos.calendar"),
+  calendar = get_calendar(),
   col.neutral = "#004488",
   col.selection = "#BB5566",
   col.roll = "grey",
@@ -28,7 +28,7 @@
 \item{x}{An \code{\linkS4class{IncrementTest}} object to be plotted.}
 
 \item{calendar}{An \code{\link[aion:TimeScale-class]{aion::TimeScale}} object specifying the target
-calendar (see \code{\link[=calendar]{calendar()}}).}
+calendar (see \code{\link[aion:calendar]{aion::calendar()}}).}
 
 \item{col.neutral, col.selection, col.roll}{A vector of colors.}
 

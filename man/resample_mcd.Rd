@@ -8,9 +8,9 @@
 \alias{simulate,MeanDate-method}
 \title{Resample Mean Ceramic Dates}
 \usage{
-\S4method{bootstrap}{MeanDate}(object, n = 1000, f = NULL, calendar = getOption("kairos.calendar"))
+\S4method{bootstrap}{MeanDate}(object, n = 1000, f = NULL, calendar = get_calendar())
 
-\S4method{jackknife}{MeanDate}(object, f = NULL, calendar = getOption("kairos.calendar"))
+\S4method{jackknife}{MeanDate}(object, f = NULL, calendar = get_calendar())
 
 \S4method{simulate}{MeanDate}(object, nsim = 1000)
 }
@@ -24,7 +24,7 @@ replications.}
 the resampling procedure) as argument.}
 
 \item{calendar}{An \code{\link[aion:TimeScale-class]{aion::TimeScale}} object specifying the target
-calendar (see \code{\link[=calendar]{calendar()}}).}
+calendar (see \code{\link[aion:calendar]{aion::calendar()}}).}
 
 \item{nsim}{A non-negative \code{\link{integer}} specifying the number of simulations.}
 }

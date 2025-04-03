@@ -10,7 +10,7 @@
 \usage{
 \S4method{plot}{AoristicSum,missing}(
   x,
-  calendar = getOption("kairos.calendar"),
+  calendar = get_calendar(),
   type = c("bar"),
   flip = FALSE,
   ncol = NULL,
@@ -24,11 +24,11 @@
   ...
 )
 
-\S4method{image}{AoristicSum}(x, calendar = getOption("kairos.calendar"), ...)
+\S4method{image}{AoristicSum}(x, calendar = get_calendar(), ...)
 
 \S4method{plot}{RateOfChange,missing}(
   x,
-  calendar = getOption("kairos.calendar"),
+  calendar = get_calendar(),
   level = 0.95,
   flip = FALSE,
   ncol = NULL,
@@ -46,7 +46,7 @@
 \item{x}{An \code{\linkS4class{AoristicSum}} object.}
 
 \item{calendar}{An \code{\link[aion:TimeScale-class]{aion::TimeScale}} object specifying the target
-calendar (see \code{\link[=calendar]{calendar()}}).}
+calendar (see \code{\link[aion:calendar]{aion::calendar()}}).}
 
 \item{type}{A \code{\link{character}} string specifying whether bar or density should
 be plotted? It must be one of "\code{bar}" or "\code{density}". Any unambiguous
