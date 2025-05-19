@@ -1,7 +1,7 @@
 Package: kairos
 Title: Analysis of Chronological Patterns from Archaeological Count
         Data
-Version: 2.2.1
+Version: 2.3.0
 Authors@R: c(
     person("Nicolas", "Frerebeau", , "nicolas.frerebeau@u-bordeaux-montaigne.fr", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5759-4944")),
@@ -25,13 +25,14 @@ Description: A toolkit for absolute and relative dating and analysis of
     occupation and duration of an archaeological site.
 License: GPL (>= 3)
 URL: https://codeberg.org/tesselle/kairos,
-        https://packages.tesselle.org/kairos/
+        https://packages.tesselle.org/kairos/,
+        https://tesselle.r-universe.dev/kairos
 BugReports: https://codeberg.org/tesselle/kairos/issues
-Depends: aion (>= 1.4.0), dimensio (>= 0.13.0), R (>= 3.5)
-Imports: arkhe (>= 1.10.0), extraDistr, grDevices, methods, stats,
+Depends: R (>= 3.5), aion (>= 1.5.0), dimensio (>= 0.13.0)
+Imports: arkhe (>= 1.11.0), extraDistr, grDevices, methods, stats,
         utils
-Suggests: folio (>= 1.5.0), knitr, markdown, rsvg, svglite, tabula (>=
-        3.2.0), tinysnapshot, tinytest
+Suggests: folio (>= 1.5.0), fontquiver, knitr, markdown, rsvg, svglite,
+        tabula (>= 3.3.0), tinysnapshot, tinytest
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.2
@@ -40,20 +41,21 @@ X-schema.org-isPartOf: https://www.tesselle.org
 X-schema.org-keywords: chronology, matrix-seriation, archaeology,
         archaeological-science, r-package
 Collate: 'AllClasses.R' 'AllGenerics.R' 'aoristic.R' 'apportion.R'
-        'coerce.R' 'event_date.R' 'event_model.R' 'event_plot.R'
-        'event_resample.R' 'fit.R' 'kairos-deprecated.R'
+        'bootstrap.R' 'coerce.R' 'event_date.R' 'event_model.R'
+        'event_plot.R' 'fit.R' 'jackknife.R' 'kairos-deprecated.R'
         'kairos-internal.R' 'kairos-package.R' 'mcd.R' 'mutators.R'
         'plot_time.R' 'seriation_assess.R' 'seriation_average.R'
         'seriation_coerce.R' 'seriation_permute.R' 'seriation_rank.R'
         'seriation_refine.R' 'show.R' 'subset.R' 'validate.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2025-04-03 12:52:42 UTC; nicolas
-Author: Nicolas Frerebeau [aut, cre] (<https://orcid.org/0000-0001-5759-4944>),
-  Brice Lebrun [art] (<https://orcid.org/0000-0001-7503-8685>, Logo
-    designer),
-  Ben Marwick [ctb] (<https://orcid.org/0000-0001-7879-4531>),
-  Anne Philippe [ctb] (<https://orcid.org/0000-0002-5331-5087>),
-  Université Bordeaux Montaigne [fnd] (03pbgwk21),
-  CNRS [fnd] (02feahw73)
+Packaged: 2025-05-19 09:26:06 UTC; nfrerebeau
+Author: Nicolas Frerebeau [aut, cre] (ORCID:
+    <https://orcid.org/0000-0001-5759-4944>),
+  Brice Lebrun [art] (ORCID: <https://orcid.org/0000-0001-7503-8685>,
+    Logo designer),
+  Ben Marwick [ctb] (ORCID: <https://orcid.org/0000-0001-7879-4531>),
+  Anne Philippe [ctb] (ORCID: <https://orcid.org/0000-0002-5331-5087>),
+  Université Bordeaux Montaigne [fnd] (ROR: <https://ror.org/03pbgwk21>),
+  CNRS [fnd] (ROR: <https://ror.org/02feahw73>)
 Repository: CRAN
-Date/Publication: 2025-04-03 14:50:02 UTC
+Date/Publication: 2025-05-19 10:40:07 UTC

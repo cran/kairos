@@ -2,8 +2,8 @@
 NULL
 
 # Import classes ===============================================================
-#' @importClassesFrom aion TimeSeries
 #' @importClassesFrom aion RataDie
+#' @importClassesFrom aion TimeSeries
 #' @importClassesFrom dimensio CA
 NULL
 
@@ -14,7 +14,6 @@ NULL
 #' archaeological assemblages.
 #' @slot dates A length-\eqn{p} [`numeric`] vector giving the dates of the
 #'  (ceramic) types expressed in *[rata die][aion::RataDie-class]*.
-#' @slot replications A `numeric` [`matrix`] giving the replications.
 #' @section Coerce:
 #'  In the code snippets below, `x` is a `MeanDate` object.
 #'  \describe{
@@ -35,14 +34,6 @@ NULL
     dates = "RataDie"
   ),
   contains = "TimeSeries"
-)
-
-.SimulationMeanDate <- setClass(
-  Class = "SimulationMeanDate",
-  slots = c(
-    replications = "matrix"
-  ),
-  contains = "MeanDate"
 )
 
 # EventDate ====================================================================

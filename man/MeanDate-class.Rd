@@ -14,8 +14,6 @@ archaeological assemblages.
 \describe{
 \item{\code{dates}}{A length-\eqn{p} \code{\link{numeric}} vector giving the dates of the
 (ceramic) types expressed in \emph{\link[aion:RataDie-class]{rata die}}.}
-
-\item{\code{replications}}{A \code{numeric} \code{\link{matrix}} giving the replications.}
 }}
 
 \note{

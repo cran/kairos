@@ -1,3 +1,13 @@
+# kairos 2.3.0
+## Bugfixes & changes
+* Deprecate `simulate()`.
+
+## Enhancements
+* `bootstrap()` method for `MeanDate` objects gained new `interval`, `seed` and `rare` arguments.
+
+## Breaking changes
+* Fix `bootstrap()` method for `MeanDate` objects: revert the change introduced in v1.1.0. By default, bootstrap replicates are drawn from a multinomial distribution.
+
 # kairos 2.2.1
 ## Internals
 * List **aion** in `Depends`.

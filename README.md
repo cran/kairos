@@ -5,9 +5,17 @@
 
 <!-- badges: start -->
 
-[![Code
-coverage](https://packages.tesselle.org/kairos/coverage/badge.svg)](https://packages.tesselle.org/kairos/coverage/)
-[![Dependencies](https://tinyverse.netlify.app/badge/kairos)](https://cran.r-project.org/package=kairos)
+<a href="https://ci.codeberg.org/repos/14692" class="pkgdown-devel"><img
+src="https://ci.codeberg.org/api/badges/14692/status.svg"
+alt="status-badge" /></a>
+<a href="https://packages.tesselle.org/kairos/coverage/"
+class="pkgdown-devel"><img
+src="https://packages.tesselle.org/kairos/coverage/badge.svg"
+alt="Code coverage" /></a>
+<a href="https://cran.r-project.org/package=kairos"
+class="pkgdown-devel"><img
+src="https://tinyverse.netlify.app/badge/kairos"
+alt="Dependencies" /></a>
 
 <a href="https://tesselle.r-universe.dev/kairos"
 class="pkgdown-devel"><img
@@ -62,7 +70,7 @@ To cite kairos in publications use:
 Frerebeau N (2025). *kairos: Analysis of Chronological Patterns from
 Archaeological Count Data*. Université Bordeaux Montaigne, Pessac,
 France. <doi:10.5281/zenodo.5653896>
-<https://doi.org/10.5281/zenodo.5653896>, R package version 2.2.1,
+<https://doi.org/10.5281/zenodo.5653896>, R package version 2.3.0,
 <https://packages.tesselle.org/kairos/>.
 
 This package is a part of the tesselle project

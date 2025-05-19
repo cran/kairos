@@ -1,5 +1,4 @@
-Sys.setlocale("LC_MESSAGES", 'en_GB.UTF-8') # Force locale
-options(kairos.calendar = calendar("CE"))
+Sys.setenv(LANGUAGE = "en")
 
 # Aoristic sum =================================================================
 ## Exemple from Palmisano et al. 2017
@@ -45,13 +44,8 @@ expect_identical(aorist_group[, 2, , drop = TRUE], aorist_B[, 1, , drop = TRUE])
 
 # Plot =========================================================================
 if (at_home()) {
-  source("helpers.R")
   using("tinysnapshot")
-  options(tinysnapshot_device = "svglite")
-  options(tinysnapshot_height = 7) # inches
-  options(tinysnapshot_width = 7)
-  options(tinysnapshot_tol = 200) # pixels
-  options(tinysnapshot_os = "Linux")
+  source("helpers.R")
 
   plot_aoristic_raw <- function() plot(aorist_raw, col = "grey")
   expect_snapshot_plot(plot_aoristic_raw, "plot_aoristic_raw")

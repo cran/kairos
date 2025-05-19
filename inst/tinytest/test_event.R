@@ -1,9 +1,6 @@
-Sys.setlocale("LC_MESSAGES", 'en_GB.UTF-8') # Force locale
-options(kairos.calendar = calendar("CE"))
+Sys.setenv(LANGUAGE = "en")
 
 if (requireNamespace("folio", quietly = TRUE)) {
-  source("helpers.R")
-
   data("zuni", package = "folio")
   zuni_dates <- c(
     LZ0569 = 1097, LZ0279 = 1119, CS16 = 1328, LZ0066 = 1111,
@@ -40,11 +37,7 @@ if (requireNamespace("folio", quietly = TRUE)) {
   # Plot =======================================================================
   if (at_home()) {
     using("tinysnapshot")
-    options(tinysnapshot_device = "svglite")
-    options(tinysnapshot_height = 7) # inches
-    options(tinysnapshot_width = 7)
-    options(tinysnapshot_tol = 200) # pixels
-    options(tinysnapshot_os = "Linux")
+    source("helpers.R")
 
     ## Bootstrap
     # boot <- with_seed(12345, bootstrap(model, n = 30))
